@@ -8,8 +8,9 @@ from django.forms import ModelForm, forms
 class CIMAccountOpenForm(ModelForm):
     class Meta:
         model = CIMAccount
-        fields = ['cim_number', 'lv_name', 'region', 'pm', 'eg_number', 'open_date', 'special_templates']
+        fields = ['cim_number', 'lv_name', 'region', 'pm', 'eg_number', 'open_date','client_restrictions', 'special_templates']
         widgets = {'open_date' : AdminDateWidget}
+
 
 class PMForm(ModelForm):
     class Meta:

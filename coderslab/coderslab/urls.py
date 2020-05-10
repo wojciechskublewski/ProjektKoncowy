@@ -24,5 +24,8 @@ urlpatterns = [
     path('add_PM/', PMCreateView.as_view(), name='add_pm'),
     path('add_SR/', SpecialRestrictionCreateView.as_view(), name='add_special_restrictions'),
     path('update_CIM/<pk>/', UpdateCIMView.as_view(), name='update_cim'),
+    path('pre_maker_review/', PREMakerView.as_view(), name='create_pre_maker'),
+    path('pre_review_list/', PREREviewListView.as_view(), name='create_pre_maker'),
+
 
 ]

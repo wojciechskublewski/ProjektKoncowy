@@ -78,8 +78,7 @@ class CIMAccount(models.Model):
     client_restrictions = models.TextField(null=True, blank=True)
     special_templates = models.ManyToManyField(SpecialRestriction, default=None, blank=True)
     funded = models.BooleanField(null=True, blank=True)
-    funded_date = models.DateField(null=True, blank=True)
-    funded_amount = models.FloatField(null=True, blank=True)
+
 
     @property
     def name(self):
@@ -87,7 +86,6 @@ class CIMAccount(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class PREReview(models.Model):
     cim_number = models.ForeignKey(CIMAccount, on_delete=models.CASCADE)

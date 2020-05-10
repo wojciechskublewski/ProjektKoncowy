@@ -13,12 +13,30 @@ class BaseView(View):
         return render(request, 'base.html')
 
 
-class OpenCIMView(CreateView):
-    model = CIMAccount
-    success_url = '/'
-    #template_name = 'brc_db/cimaccount_form.html'
-    #form_class = CIMAccountOpenForm
-    fields = ['cim_number', 'lv_name', 'region', 'pm', 'eg_number', 'open_date', 'client_restrictions', 'special_templates']
+class OpenCIMView(View):
+    def get(self, request):
+        form = CIMAccountOpenForm()
+        ctx = {'form': form}
+        return render(request, 'brc_db/cimaccount_form.html', ctx)
+
+    def post(self, request):
+        form = CIMAccountOpenForm(request.POST)
+        ctx = {'form': form}
+        if form.is_valid():
+            cim = form.instance
+            cim.save()
+            p = PREReview()
+            p.cim_number = cim
+            p.save()
+            return render(request, 'base.html')
+        return request, 'brc_db/cimaccount_form.html', ctx
+
+
+    # model = CIMAccount
+    # success_url = '/'
+    # #template_name = 'brc_db/cimaccount_form.html'
+    # #form_class = CIMAccountOpenForm
+    # fields = ['cim_number', 'lv_name', 'region', 'pm', 'eg_number', 'open_date', 'client_restrictions', 'special_templates']
 
 
 class PMCreateView(CreateView):
@@ -45,3 +63,17 @@ class UpdateCIMView(UpdateView):
         return context
 
 
+class PREMakerView(CreateView):
+    model = PREReview
+    template_name = 'brc_db/pre_maker_review_form.html'
+    fields = ['cim_number', 'ios_current', 'ios_inline']
+    success_url = '/'
+
+
+class PREREviewListView(TemplateView):
+    template_name = 'brc_db/pre_list.html'
+
+    def get_context_data(self, **kwargs):
+        contex = super().get_context_data(**kwargs)
+        contex['cim'] = PREReview.objects.all().filter(pre_checker_date=None)
+        return contex

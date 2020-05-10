@@ -76,9 +76,10 @@ class CIMAccount(models.Model):
     close_date = models.DateField(null=True, blank=True)
     close_reason = models.CharField(max_length=128, null=True, blank=True)
     client_restrictions = models.TextField(null=True, blank=True)
-    special_templates = models.ManyToManyField(SpecialRestriction,null=True, blank=True)
+    special_templates = models.ManyToManyField(SpecialRestriction, default=None, blank=True)
     funded = models.BooleanField(null=True, blank=True)
     funded_date = models.DateField(null=True, blank=True)
+    funded_amount = models.FloatField(null=True, blank=True)
 
     @property
     def name(self):
@@ -105,7 +106,6 @@ class PREReview(models.Model):
 
 class POSTReview(models.Model):
     cim_number = models.ForeignKey(CIMAccount, on_delete=models.CASCADE)
-    funded_amount = models.FloatField(null=True, blank=True)
     fees_checked = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     letter_sent = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_client_restriction = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)

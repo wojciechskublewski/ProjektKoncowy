@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from brc_db.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', BaseView.as_view(), name='base_view'),
+    path('add_CIM/', OpenCIMView.as_view(), name='add_cim'),
+    path('add_PM/', PMCreateView.as_view(), name='add_pm'),
+    path('add_SR/', SpecialRestrictionCreateView.as_view(), name='add_special_restrictions'),
+    path('update_CIM/<pk>/', UpdateCIMView.as_view(), name='update_cim'),
+
 ]

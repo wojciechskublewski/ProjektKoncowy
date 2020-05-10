@@ -18,18 +18,28 @@ class OpenCIMView(View):
         form = CIMAccountOpenForm()
         ctx = {'form': form}
         return render(request, 'brc_db/cimaccount_form.html', ctx)
-
     def post(self, request):
         form = CIMAccountOpenForm(request.POST)
         ctx = {'form': form}
         if form.is_valid():
-            cim = form.instance
-            cim.save()
-            p = PREReview()
-            p.cim_number = cim
-            p.save()
+            c = form.instance
+            # c = CIMAccount()
+            # c.cim_number = form.cleaned_data['cim_number']
+            # c.lv = form.cleaned_data['lv_name']
+            # c.region = form.cleaned_data['region']
+            # c.pm = form.cleaned_data['pm']
+            # c.eg_number = form.cleaned_data['eg_number']
+            # c.client_restrictions = form.cleaned_data['client_restrictions']
+            # c.special_templates = form.cleaned_data['special_templates']
+            c.save()
+            pre = PREReview()
+            pre.cim_number = c
+            pre.save()
+            post = POSTReview()
+            post.cim_number = c
+            post.save()
             return render(request, 'base.html')
-        return request, 'brc_db/cimaccount_form.html', ctx
+        return render(request, 'brc_db/cimaccount_form.html', ctx)
 
 
     # model = CIMAccount

@@ -110,7 +110,7 @@ class POSTReview(models.Model):
     cr_aa_bg_system = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_sa = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     post_maker_date = models.DateField(null=True, blank=True)
-    maker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_maker', blank=True)
+    maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='post_maker', blank=True)
     post_checker_date = models.DateField(null=True, blank=True)
     post_checker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='post_checker', blank=True)
 

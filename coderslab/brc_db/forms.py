@@ -17,3 +17,14 @@ class PMForm(ModelForm):
         model = PM
         fields = '__all__'
 
+
+class ChagesCreateForm(ModelForm):
+    class Meta:
+        model = Changes
+        fields = '__all__'
+
+
+class ChangesReviewMakerForm(ModelForm):
+    class Meta:
+        fields = ['']
+

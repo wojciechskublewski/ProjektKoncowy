@@ -128,6 +128,7 @@ class ChangesReview(models.Model):
     cr_client_restriction = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_aa_br_system = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_sa = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
     change_maker_date = models.DateField(null=True, blank=True)
     change_maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='change_maker', blank=True)
     change_checker_date = models.DateField(null=True, blank=True)

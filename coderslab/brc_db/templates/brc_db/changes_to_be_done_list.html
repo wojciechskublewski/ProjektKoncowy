@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% for c in change %}
+
+    <p>{{c.cim_number}}, {{c.change.change_date}} {{c.change.get_change_name_display}}</p>
+
+{% endfor %}
+</body>
+</html>

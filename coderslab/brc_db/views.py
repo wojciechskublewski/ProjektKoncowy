@@ -84,6 +84,50 @@ class PREREviewListView(TemplateView):
     template_name = 'brc_db/pre_list.html'
 
     def get_context_data(self, **kwargs):
-        contex = super().get_context_data(**kwargs)
-        contex['cim'] = PREReview.objects.all().filter(pre_checker_date=None)
-        return contex
+        ctx = super().get_context_data(**kwargs)
+        ctx['cim'] = PREReview.objects.all().filter(pre_checker_date=None)
+        return ctx
+
+
+class LVCreateView(CreateView):
+    model = LV
+    success_url = '/'
+    fields = '__all__'
+    template_name = 'brc_db/lv_form.html'
+
+
+class RegionCreatView(CreateView):
+    model = Region
+    success_url = '/'
+    fields = '__all__'
+    template_name = 'brc_db/region_form.html'
+
+
+class ChangesCreateView(View):
+    def get(self, request):
+        form = ChagesCreateForm
+        ctx = {'form': form}
+        return render(request, 'brc_db/change_form.html', ctx)
+
+    def post(self, request):
+        form = ChagesCreateForm(request.POST)
+        ctx = {'form': form}
+        if form.is_valid():
+            c = form.instance
+            c.save()
+            c_review = ChangesReview()
+            c_review.cim_number = c.cim_number
+            c_review.change = c
+            c_review.save()
+            return render(request, 'base.html')
+        return render(request, 'brc_db/change_form.html', ctx)
+
+
+class ChangesReviewMakerListView(TemplateView):
+    template_name = 'brc_db/changes_to_be_done_list.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['change'] = ChangesReview.objects.all().filter(change_checker_date=None)
+        return ctx
+

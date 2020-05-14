@@ -24,11 +24,14 @@ urlpatterns = [
     path('add_PM/', PMCreateView.as_view(), name='add_pm'),
     path('add_SR/', SpecialRestrictionCreateView.as_view(), name='add_special_restrictions'),
     path('update_CIM/<pk>/', UpdateCIMView.as_view(), name='update_cim'),
+    path('update_closing_CIM/<pk>/', ClosedAccountUpdateView.as_view(), name='update_closing_cim'),
+    path('update_funded_CIM/<pk>/', FundedAccountUpdateView.as_view(), name='update_funded_cim'),
     path('pre_maker_review/', PREMakerView.as_view(), name='create_pre_maker'),
     path('pre_review_list/', PREREviewListView.as_view(), name='create_pre_maker'),
     path('add_lv/', LVCreateView.as_view(), name='create_lv'),
     path('add_region/', RegionCreatView.as_view(), name='create_region'),
     path('add_change/', ChangesCreateView.as_view(), name='create_change'),
     path('changes_list/', ChangesReviewMakerListView.as_view(), name='list_change_maker'),
+    path('pre_maker_checklist/<pk>/', MakerPreChecklistView.as_view(), name='pre_maker_checklist'),
 
 ]

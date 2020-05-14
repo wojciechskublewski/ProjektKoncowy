@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 # Create your models here.
 from django.db.models import ForeignKey
@@ -75,9 +76,12 @@ class CIMAccount(models.Model):
     open_date = models.DateField()
     close_date = models.DateField(null=True, blank=True)
     close_reason = models.CharField(max_length=128, null=True, blank=True)
+    closed = models.BooleanField(default=False)
     client_restrictions = models.TextField(null=True, blank=True)
     special_templates = models.ManyToManyField(SpecialRestriction, default=None, blank=True)
     funded = models.BooleanField(null=True, blank=True)
+    funded_date = models.DateField(blank=True, null=True)
+    funded_amount = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=12)
 
 
     @property

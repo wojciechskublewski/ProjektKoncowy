@@ -131,3 +131,47 @@ class ChangesReviewMakerListView(TemplateView):
         ctx['change'] = ChangesReview.objects.all().filter(change_checker_date=None)
         return ctx
 
+
+class ClosedAccountUpdateView(UpdateView):
+    model = CIMAccount
+    template_name = 'brc_db/cimaccount_closing_update_form.html'
+    fields = ['close_date', 'close_reason', 'closed']
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cim'] = self.object.cim_number
+        return context
+
+
+class FundedAccountUpdateView(UpdateView):
+    model = CIMAccount
+    template_name = 'brc_db/cimaccount_funded_update_form.html'
+    fields = ['funded', 'funded_date', 'funded_amount']
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cim'] = self.object.cim_number
+        return context
+
+
+class MakerPreChecklistView(UpdateView):
+    model = PREReview
+    template_name = 'brc_db/pre_maker_checklist_update_form.html'
+    fields = ['ios_current', 'ios_inline', 'ke_mp_mod', 'ke_limited', 'fees_check', 'cr_check', 'sa_check']
+    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cim'] = self.object.cim_number
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.pre_maker_date = datetime.datetime.now().date()
+        self.object.pre_maker = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
+

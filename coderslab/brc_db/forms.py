@@ -24,7 +24,9 @@ class ChagesCreateForm(ModelForm):
         fields = '__all__'
 
 
-class ChangesReviewMakerForm(ModelForm):
+class PREMakerChecklistForm(ModelForm):
     class Meta:
-        fields = ['']
+        model = PREReview
+        fields = ['ios_current', 'ios_inline', 'ke_mp_mod', 'ke_limited', 'fees_check', 'cr_check', 'sa_check']
+
 

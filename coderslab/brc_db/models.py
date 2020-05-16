@@ -107,12 +107,17 @@ class PREReview(models.Model):
 
 
 class POSTReview(models.Model):
-    cim_number = models.ForeignKey(CIMAccount, on_delete=models.CASCADE)
-    fees_checked = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
-    letter_sent = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
-    cr_client_restriction = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
-    cr_aa_bg_system = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
-    cr_sa = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
+    cim_number = models.ForeignKey(CIMAccount, on_delete=models.CASCADE,)
+    fees_checked = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True,
+                                       verbose_name='Fess checked and in line?')
+    letter_sent = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True,
+                                      verbose_name='Is client restriction letter sent?')
+    cr_client_restriction = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True,
+                                                verbose_name='Are client restrictions incldued in Charles River?')
+    cr_aa_bg_system = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True,
+                                          verbose_name='Are asset allocation / business rules / cim system included in Charles River')
+    cr_sa = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True,
+                                verbose_name='Substantial affiliation included in Charles River?')
     post_maker_date = models.DateField(null=True, blank=True)
     maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='post_maker', blank=True)
     post_checker_date = models.DateField(null=True, blank=True)

@@ -6,10 +6,10 @@
 </head>
 <body>
 
-    {{cim}}
+    {{cim}}, {{cim.funded_date}}, {{cim.funded_amount}} <a href='/update_funded_CIM/{{cim.id}}/'>Update funding details</a>
     <form method="post">
         {% csrf_token %}
-        {{form}}<br>
+        {{form.as_p}}<br>
         <input type="submit" VALUE="OK">
     </form>
 

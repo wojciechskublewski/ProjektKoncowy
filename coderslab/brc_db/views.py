@@ -1,9 +1,10 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from .forms import *
 from .models import *
 from django.views.generic.edit import  FormView, CreateView, UpdateView
 from django.views import View
 from django.views.generic import TemplateView
+from django.db.models import Prefetch
 
 # Create your views here.
 
@@ -144,10 +145,27 @@ class ClosedAccountUpdateView(UpdateView):
         return context
 
 
-class FundedAccountUpdateView(UpdateView):
+class FundedAccountUpdateView(View):
+    def get(self, request, pk):
+        form = FundedCimForm
+        cim = CIMAccount.objects.get(id=pk)
+        return render(request, 'brc_db/cimaccount_funded_update_form.html', {'form': form, 'cim': cim})
+
+    def post(self, request, pk):
+        form = FundedCimForm(request.POST)
+        cim = CIMAccount.objects.get(id=pk)
+        if form.is_valid():
+            c = form.instance
+            cim.funded = c.funded
+            cim.funded_date = c.funded_date
+            cim.funded_amount = c.funded_amount
+            cim.save()
+            return render(request, 'base.html')
+        return render(request, 'brc_db/cimaccount_funded_update_form.html', {'form': form, 'cim': cim})
+
     model = CIMAccount
     template_name = 'brc_db/cimaccount_funded_update_form.html'
-    fields = ['funded', 'funded_date', 'funded_amount']
+
     success_url = '/'
 
     def get_context_data(self, **kwargs):
@@ -173,5 +191,29 @@ class MakerPreChecklistView(UpdateView):
         self.object.pre_maker = self.request.user
         self.object.save()
         return super().form_valid(form)
+
+
+class POSTReviewNotDoneListView(TemplateView):
+    template_name = 'brc_db/post_acceptance_to_be_done_list.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['post'] = POSTReview.objects.filter(cim_number__closed=False).\
+            filter(post_checker_date__isnull=True).order_by('cim_number')
+        return ctx
+
+
+class MakerPostChecklistView(View):
+    def get(self, request, pk):
+        p = POSTReview.objects.get(id=pk)
+        c = CIMAccount.objects.get(cim_number=p.cim_number)
+        form = PostMakerChecklistForm
+        if not c.funded or c.funded_date is None or c.funded_amount is None:
+            pk = c.id
+            return redirect(f'/update_funded_CIM/{pk}/')
+        return render(request, 'brc_db/post_maker_checklist_update_form.html', {'form': form, 'cim': c})
+
+
+
 
 

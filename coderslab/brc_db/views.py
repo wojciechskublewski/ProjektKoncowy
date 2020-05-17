@@ -206,12 +206,18 @@ class POSTReviewNotDoneListView(TemplateView):
 class MakerPostChecklistView(View):
     def get(self, request, pk):
         p = POSTReview.objects.get(id=pk)
+        if p.post_checker is not None:
+            ctx = {
+                'msg': f'Checklist for CIM {p.cim_number} is already done and checked!'
+            }
+            return render(request, 'brc_db/post_maker_checklist_update_form.html', ctx)
         c = CIMAccount.objects.get(cim_number=p.cim_number)
         form = PostMakerChecklistForm
         if not c.funded or c.funded_date is None or c.funded_amount is None:
             pk = c.id
             return redirect(f'/update_funded_CIM/{pk}/')
-        return render(request, 'brc_db/post_maker_checklist_update_form.html', {'form': form, 'cim': c})
+        return render(request, 'brc_db/post_maker_checklist_update_form.html',
+                      {'form': form, 'cim': c})
 
     def post(self, request, pk):
         form = PostMakerChecklistForm(request.POST)
@@ -233,8 +239,11 @@ class MakerPostChecklistView(View):
 
 class PostCheckerReviewView(View):
     def get(self, request, pk):
-        form = PostCheckerReviewForm
         p = POSTReview.objects.get(id=pk)
+
+
+        form = PostCheckerReviewForm
+
         ctx = {
             'form': form,
             'p': p

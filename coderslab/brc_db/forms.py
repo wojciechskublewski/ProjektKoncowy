@@ -40,7 +40,12 @@ class FundedCimForm(ModelForm):
     class Meta:
         model = CIMAccount
         fields = ['funded', 'funded_date', 'funded_amount']
-        widgets = {'funded': widgets.CheckboxInput}
+
+
+class PostCheckerReviewForm(ModelForm):
+    class Meta:
+        model = POSTReview
+        fields = ['post_checked']
 
 
 

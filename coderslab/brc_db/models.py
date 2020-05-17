@@ -8,7 +8,7 @@ from django.db.models import ForeignKey
 CHECKLIST_VALUES = (
     (1, "N/A"),
     (2, "N"),
-    (3, "y"),
+    (3, "Y"),
 )
 
 
@@ -120,6 +120,7 @@ class POSTReview(models.Model):
                                 verbose_name='Substantial affiliation included in Charles River?')
     post_maker_date = models.DateField(null=True, blank=True)
     maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='post_maker', blank=True)
+    post_checked = models.BooleanField(default=False)
     post_checker_date = models.DateField(null=True, blank=True)
     post_checker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='post_checker', blank=True)
 

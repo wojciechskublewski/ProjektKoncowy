@@ -213,7 +213,49 @@ class MakerPostChecklistView(View):
             return redirect(f'/update_funded_CIM/{pk}/')
         return render(request, 'brc_db/post_maker_checklist_update_form.html', {'form': form, 'cim': c})
 
+    def post(self, request, pk):
+        form = PostMakerChecklistForm(request.POST)
+        ctx = {'form': form}
+        if form.is_valid():
+            p = POSTReview.objects.get(id=pk)
+            c = form.instance
+            p.fees_checked = c.fees_checked
+            p.letter_sent = c.letter_sent
+            p.cr_client_restriction = c.cr_client_restriction
+            p.cr_aa_bg_system = c.cr_aa_bg_system
+            p.cr_sa = c.cr_sa
+            p.post_maker_date = datetime.datetime.now().date()
+            p.maker = request.user
+            p.save()
+            return render(request, 'base.html')
+        return render(request, 'brc_db/change_form.html', ctx)
 
 
+class PostCheckerReviewView(View):
+    def get(self, request, pk):
+        form = PostCheckerReviewForm
+        p = POSTReview.objects.get(id=pk)
+        ctx = {
+            'form': form,
+            'p': p
+        }
+        return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
 
+    def post(self, request, pk):
+        form = PostCheckerReviewForm(request.POST)
+        p = POSTReview.objects.get(id=pk)
+        ctx = {
+            'form': form,
+            'p': p
+        }
+        if form.is_valid():
+            p_post = form.instance
+            if request.user == p.maker:
+                ctx['msg'] = 'Maker cannot be the same as checker!!!!'
+                return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
+            p.post_checked = p_post.post_checked
+            p.post_checker_date = datetime.datetime.now().date()
+            p.post_checker = request.user
+            p.save()
+            return redirect('/post_list')
 

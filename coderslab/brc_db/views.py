@@ -240,10 +240,12 @@ class MakerPostChecklistView(View):
 class PostCheckerReviewView(View):
     def get(self, request, pk):
         p = POSTReview.objects.get(id=pk)
-
-
+        if p.post_checker is not None:
+            ctx = {
+                'msg1': f'Checklist for CIM {p.cim_number} is already done and checked!'
+            }
+            return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
         form = PostCheckerReviewForm
-
         ctx = {
             'form': form,
             'p': p
@@ -261,6 +263,9 @@ class PostCheckerReviewView(View):
             p_post = form.instance
             if request.user == p.maker:
                 ctx['msg'] = 'Maker cannot be the same as checker!!!!'
+                return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
+            if  p.maker is None:
+                ctx['msg'] = 'Not reviewed by maker'
                 return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
             p.post_checked = p_post.post_checked
             p.post_checker_date = datetime.datetime.now().date()

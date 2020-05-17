@@ -6,22 +6,27 @@
 </head>
 <body>
 
-<h1 style="color: #ba2121">{{msg}}</h1>
+    {% if msg1 %}
+    <h1 style="color: coral">{{msg1}}</h1>
+    <p><a href='/post_list/'>Post acceptance list</a></p>
+    {% else %}
 
-<p>CIM Number: {{p.cim_number}}</p>
-<p>Funding details: {{p.cim_number.funded_date}}, {{p.cim_number.funded_amount}}</p>
-<p>Fees checked and in line: {{p.get_fees_checked_display}}</p>
-<p>Letter was sent to the client: {{p.get_letter_sent_display}} </p>
-<p>Asset allocation / CIM System / Business Guidelines added to Charles River: {{p.get_cr_aa_bg_system_display}} </p>
-<p>Client restrictions added to Charles River: {{p.get_cr_aa_bg_system_display}} </p>
-<p>Substantial affiliation added to Charles River: {{p.get_cr_sa_display}}</p>
-<p>Maker: {{p.maker}} Maker date: {{p.post_maker_date}}</p>
-<p></p>
+    <h1 style="color: #ba2121">{{msg}}</h1>
+
+    <p>CIM Number: {{p.cim_number}}</p>
+    <p>Funding details: {{p.cim_number.funded_date}}, {{p.cim_number.funded_amount}}</p>
+    <p>Fees checked and in line: {{p.get_fees_checked_display}}</p>
+    <p>Letter was sent to the client: {{p.get_letter_sent_display}} </p>
+    <p>Asset allocation / CIM System / Business Guidelines added to Charles River: {{p.get_cr_aa_bg_system_display}} </p>
+    <p>Client restrictions added to Charles River: {{p.get_cr_aa_bg_system_display}} </p>
+    <p>Substantial affiliation added to Charles River: {{p.get_cr_sa_display}}</p>
+    <p>Maker: {{p.maker}} Maker date: {{p.post_maker_date}}</p>
     <form method="post">
         {% csrf_token %}
         {{form.as_p}}<br>
         <input type="submit" VALUE="OK">
     </form>
 
+    {% endif %}
 </body>
 </html>

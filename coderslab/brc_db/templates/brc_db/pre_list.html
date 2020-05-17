@@ -7,7 +7,10 @@
 <body>
     {% for account in cim %}
 
-       <p> {{account.cim_number}}, Data review maker: {{account.pre_maker_date}}</p>
+       <p> {{account.cim_number}}, Data review maker: {{account.pre_maker_date}}
+       <a href="/pre_maker_checklist/{{account.id}}/">Maker review</a>
+       <a href="/pre_checker_checklist/{{account.id}}/">Checker review</a>
+       </p>
 
     {% endfor %}
 

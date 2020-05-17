@@ -34,6 +34,7 @@ urlpatterns = [
     path('changes_list/', ChangesReviewMakerListView.as_view(), name='list_change_maker'),
     path('post_list/', POSTReviewNotDoneListView.as_view(), name='list_post_maker'),
     path('pre_maker_checklist/<pk>/', MakerPreChecklistView.as_view(), name='pre_maker_checklist'),
+    path('pre_checker_checklist/<pk>/', PreCheckerReviewView.as_view(), name='pre_checker_checklist'),
     path('post_maker_checklist/<pk>/', MakerPostChecklistView.as_view(), name='post_maker_checklist'),
     path('post_checker_checklist/<pk>/', PostCheckerReviewView.as_view(), name='post_checker_checklist'),
 

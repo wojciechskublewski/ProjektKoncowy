@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    {% if msg1 %}
+    <h1 style="color: coral">{{msg1}}</h1>
+    <p><a href='/pre_review_list/'>Pre acceptance list</a></p>
+    {% else %}
+
+    <h1 style="color: #ba2121">{{msg}}</h1>
+
+    <p>CIM Number: {{p.cim_number}}</p>
+    <p>IOS current? : {{p.get_ios_current_display}}</p>
+    <p>IOS inline: {{p.get_ios_inline_display}}</p>
+    <p>K&E moderate for manged portfolio: {{p.get_ke_mp_mod_display}} </p>
+    <p>K&E limited for asset invested: {{p.get_ke_limited_display}} </p>
+    <p>Fees checked: {{p.get_fees_check_display}} </p>
+    <p>Charles River updated: {{p.get_cr_check_display}}</p>
+    <p>Substantial affiliation updated: {{p.get_sa_check_display}}</p>
+    <p>Comment: {{p.comment}}</p>
+    <p>Maker: {{p.pre_maker}} Maker date: {{p.pre_maker_date}}</p>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}<br>
+        <input type="submit" VALUE="OK">
+    </form>
+
+    {% endif %}
+
+</body>
+</html>

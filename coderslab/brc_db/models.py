@@ -91,6 +91,7 @@ class CIMAccount(models.Model):
     def __str__(self):
         return self.name
 
+
 class PREReview(models.Model):
     cim_number = models.ForeignKey(CIMAccount, on_delete=models.CASCADE)
     ios_current = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
@@ -100,6 +101,8 @@ class PREReview(models.Model):
     fees_check = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_check = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     sa_check = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
+    comment = models.TextField(null=True, blank=True)
+    pre_checked = models.BooleanField(default=False)
     pre_maker_date = models.DateField(null=True, blank=True)
     pre_maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='pre_maker', blank=True)
     pre_checker_date = models.DateField(null=True, blank=True)
@@ -118,6 +121,7 @@ class POSTReview(models.Model):
                                           verbose_name='Are asset allocation / business rules / cim system included in Charles River')
     cr_sa = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True,
                                 verbose_name='Substantial affiliation included in Charles River?')
+    comment = models.TextField(blank=True, null=True)
     post_maker_date = models.DateField(null=True, blank=True)
     maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='post_maker', blank=True)
     post_checked = models.BooleanField(default=False)
@@ -139,6 +143,7 @@ class ChangesReview(models.Model):
     cr_aa_br_system = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_sa = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
+    change_checked = models.BooleanField(default=False)
     change_maker_date = models.DateField(null=True, blank=True)
     change_maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='change_maker', blank=True)
     change_checker_date = models.DateField(null=True, blank=True)

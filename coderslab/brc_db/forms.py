@@ -27,13 +27,14 @@ class ChagesCreateForm(ModelForm):
 class PREMakerChecklistForm(ModelForm):
     class Meta:
         model = PREReview
-        fields = ['ios_current', 'ios_inline', 'ke_mp_mod', 'ke_limited', 'fees_check', 'cr_check', 'sa_check']
+        fields = ['ios_current', 'ios_inline', 'ke_mp_mod', 'ke_limited',
+                  'fees_check', 'cr_check', 'sa_check', 'comment']
 
 
 class PostMakerChecklistForm(ModelForm):
     class Meta:
         model = POSTReview
-        fields = ['fees_checked', 'letter_sent', 'cr_client_restriction', 'cr_aa_bg_system', 'cr_sa']
+        fields = ['fees_checked', 'letter_sent', 'cr_client_restriction', 'cr_aa_bg_system', 'cr_sa', 'comment']
 
 
 class FundedCimForm(ModelForm):
@@ -46,6 +47,13 @@ class PostCheckerReviewForm(ModelForm):
     class Meta:
         model = POSTReview
         fields = ['post_checked']
+
+
+class PreCheckerReviewForm(ModelForm):
+    class Meta:
+        model = PREReview
+        fields = ['pre_checked']
+
 
 
 

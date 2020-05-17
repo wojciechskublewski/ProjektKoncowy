@@ -174,23 +174,77 @@ class FundedAccountUpdateView(View):
         return context
 
 
-class MakerPreChecklistView(UpdateView):
-    model = PREReview
-    template_name = 'brc_db/pre_maker_checklist_update_form.html'
-    fields = ['ios_current', 'ios_inline', 'ke_mp_mod', 'ke_limited', 'fees_check', 'cr_check', 'sa_check']
-    success_url = '/'
+class MakerPreChecklistView(View):
+    def get(self, request, pk):
+        pre = PREReview.objects.get(id=pk)
+        if pre.pre_checker is not None:
+            ctx = {
+                'msg1': 'Pre review already done and checked!!!!'
+            }
+            return render(request,
+                          'brc_db/pre_maker_checklist_update_form.html', ctx)
+        form = PREMakerChecklistForm
+        ctx = {
+            'form': form,
+            'pre': pre
+        }
+        return render(request,
+                      'brc_db/pre_maker_checklist_update_form.html', ctx)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['cim'] = self.object.cim_number
-        return context
+    def post(self, request, pk):
+        form = PREMakerChecklistForm(request.POST)
+        pre = PREReview.objects.get(id=pk)
+        if form.is_valid():
+            p = form.instance
+            pre.ios_current = p.ios_current
+            pre.ios_inline = p.ios_inline
+            pre.ke_mp_mod = p.ke_mp_mod
+            pre.ke_limited = p.ke_limited
+            pre.cr_check = p.cr_check
+            pre.sa_check = p.sa_check
+            pre.fees_check = p.fees_check
+            pre.pre_maker_date = datetime.datetime.now().date()
+            pre.pre_maker = request.user
+            pre.save()
+            return redirect('/pre_review_list/')
 
-    def form_valid(self, form):
-        self.object = form.save()
-        self.object.pre_maker_date = datetime.datetime.now().date()
-        self.object.pre_maker = self.request.user
-        self.object.save()
-        return super().form_valid(form)
+
+class PreCheckerReviewView(View):
+    def get(self, request, pk):
+        pre = PREReview.objects.get(id=pk)
+
+        if pre.pre_checker is not None:
+            ctx = {
+                'msg1': f'Checklist for CIM {pre.cim_number} is already done and checked!'
+            }
+            return render(request, 'brc_db/pre_checker_checklist_update_form.html', ctx)
+        form = PreCheckerReviewForm
+        ctx = {
+            'form': form,
+            'p': pre
+        }
+        return render(request, 'brc_db/pre_checker_checklist_update_form.html', ctx)
+
+    def post(self, request, pk):
+        form = PreCheckerReviewForm(request.POST)
+        pre = PREReview.objects.get(id=pk)
+        ctx = {
+            'form': form,
+            'p': pre
+        }
+        if form.is_valid():
+            pre_post = form.instance
+            if request.user == pre.pre_maker:
+                ctx['msg'] = 'Maker cannot be the same as checker!!!!'
+                return render(request, 'brc_db/pre_checker_checklist_update_form.html', ctx)
+            if pre.pre_maker is None:
+                ctx['msg'] = 'Not reviewed by maker'
+                return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
+            pre.pre_checked = pre_post.pre_checked
+            pre.pre_checker_date = datetime.datetime.now().date()
+            pre.pre_checker = request.user
+            pre.save()
+            return redirect('/pre_review_list')
 
 
 class POSTReviewNotDoneListView(TemplateView):
@@ -230,6 +284,7 @@ class MakerPostChecklistView(View):
             p.cr_client_restriction = c.cr_client_restriction
             p.cr_aa_bg_system = c.cr_aa_bg_system
             p.cr_sa = c.cr_sa
+            p.comment = c.pre_comment
             p.post_maker_date = datetime.datetime.now().date()
             p.maker = request.user
             p.save()

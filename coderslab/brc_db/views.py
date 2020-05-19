@@ -5,6 +5,7 @@ from django.views.generic.edit import  FormView, CreateView, UpdateView
 from django.views import View
 from django.views.generic import TemplateView
 from django.db.models import Prefetch
+from .functions import *
 
 # Create your views here.
 
@@ -339,17 +340,11 @@ class MakerPostChecklistView(View):
                       {'form': form, 'cim': c})
 
     def post(self, request, pk):
-        form = PostMakerChecklistForm(request.POST)
+        p = POSTReview.objects.get(id=pk)
+        form = PostMakerChecklistForm(request.POST, instance=p)
         ctx = {'form': form}
         if form.is_valid():
-            p = POSTReview.objects.get(id=pk)
-            c = form.instance
-            p.fees_checked = c.fees_checked
-            p.letter_sent = c.letter_sent
-            p.cr_client_restriction = c.cr_client_restriction
-            p.cr_aa_bg_system = c.cr_aa_bg_system
-            p.cr_sa = c.cr_sa
-            p.comment = c.comment
+            form.save()
             p.post_maker_date = datetime.datetime.now().date()
             p.maker = request.user
             p.save()
@@ -391,6 +386,7 @@ class PostCheckerReviewView(View):
             p.post_checker_date = datetime.datetime.now().date()
             p.post_checker = request.user
             p.save()
+            post_acc_checklist_pdf(pk)
             return redirect('/post_list')
         return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
 

@@ -48,11 +48,25 @@ class PostCheckerReviewForm(ModelForm):
         model = POSTReview
         fields = ['post_checked']
 
+    def clean(self):
+        cleaned_data = super().clean()
+        checked = cleaned_data.get('post_checked')
+        print(checked)
+        if checked is None or checked is False:
+            raise forms.ValidationError('Potwierdz ze sprawdziles wszystkie zmiany!')
+
 
 class PreCheckerReviewForm(ModelForm):
     class Meta:
         model = PREReview
         fields = ['pre_checked']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        checked = cleaned_data.get('pre_checked')
+        print(checked)
+        if checked is None or checked is False:
+            raise forms.ValidationError('Potwierdz ze sprawdziles wszystkie zmiany!')
 
 
 class ChangesReviewMakerForm(ModelForm):
@@ -66,5 +80,14 @@ class ChangesReviewCheckerForm(ModelForm):
     class Meta:
         model = ChangesReview
         fields = ['change_checked']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        checked = cleaned_data.get('change_checked')
+        print(checked)
+        if checked is None or checked is False:
+            raise forms.ValidationError('Potwierdz ze sprawdziles wszystkie zmiany!')
+
+
 
 

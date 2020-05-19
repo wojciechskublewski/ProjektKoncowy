@@ -194,6 +194,7 @@ class ChangesCheckerReviewView(View):
             change.change_checker_date = datetime.datetime.now().date()
             change.save()
             return redirect('/changes_list/')
+        return render(request, 'brc_db/changes_checker_review.html', ctx)
 
 
 class ClosedAccountUpdateView(UpdateView):
@@ -308,6 +309,7 @@ class PreCheckerReviewView(View):
             pre.pre_checker = request.user
             pre.save()
             return redirect('/pre_review_list')
+        return render(request, 'brc_db/pre_checker_checklist_update_form.html', ctx)
 
 
 class POSTReviewNotDoneListView(TemplateView):
@@ -347,7 +349,7 @@ class MakerPostChecklistView(View):
             p.cr_client_restriction = c.cr_client_restriction
             p.cr_aa_bg_system = c.cr_aa_bg_system
             p.cr_sa = c.cr_sa
-            p.comment = c.pre_comment
+            p.comment = c.comment
             p.post_maker_date = datetime.datetime.now().date()
             p.maker = request.user
             p.save()
@@ -390,4 +392,5 @@ class PostCheckerReviewView(View):
             p.post_checker = request.user
             p.save()
             return redirect('/post_list')
+        return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
 

@@ -133,6 +133,69 @@ class ChangesReviewMakerListView(TemplateView):
         return ctx
 
 
+class ChangesReviewMakerView(View):
+    def get(self, request, pk):
+        change = ChangesReview.objects.get(id=pk)
+        form = ChangesReviewMakerForm
+        ctx = {
+            'form': form,
+            'c': change
+        }
+        return render(request, 'brc_db/changes_maker_review.html', ctx)
+
+    def post(self, request, pk):
+        change = ChangesReview.objects.get(id=pk)
+        if change.change_checker is not None:
+            ctx = {'msg1': f'Change review is already done and checked!!!!'}
+            return render(request, 'brc_db/changes_maker_review.html', ctx)
+        form = ChangesReviewMakerForm(request.POST, instance=change)
+        ctx = {
+            'form': form,
+            'c': change
+        }
+        if form.is_valid():
+            form.save()
+            change.change_maker_date = datetime.datetime.now().date()
+            change.change_maker = request.user
+            change.save()
+            return redirect('/changes_list/')
+        return render(request, 'brc_db/changes_maker_review.html', ctx)
+
+
+class ChangesCheckerReviewView(View):
+    def get(self, request, pk):
+        change = ChangesReview.objects.get(id=pk)
+        if change.change_checker is not None:
+            ctx = { 'msg1': 'Change is already done!!!'}
+            return render(request, 'brc_db/changes_checker_review.html', ctx)
+        form = ChangesReviewCheckerForm
+        ctx = {
+            'form': form,
+            'c': change
+        }
+        return render(request, 'brc_db/changes_checker_review.html', ctx)
+
+    def post(self, request, pk):
+        change = ChangesReview.objects.get(id=pk)
+        form = ChangesReviewCheckerForm(request.POST, instance=change)
+        ctx = {
+            'form': form,
+            'c': change
+        }
+        if form.is_valid():
+            if change.change_maker is None:
+                ctx['msg'] = 'Review is not done by maker!!!'
+                return render(request, 'brc_db/changes_checker_review.html', ctx)
+            if change.change_maker == request.user:
+                ctx['msg'] = 'Maker cannot be the same as checker!!!'
+                return render(request, 'brc_db/changes_checker_review.html', ctx)
+            form.save()
+            change.change_checker = request.user
+            change.change_checker_date = datetime.datetime.now().date()
+            change.save()
+            return redirect('/changes_list/')
+
+
 class ClosedAccountUpdateView(UpdateView):
     model = CIMAccount
     template_name = 'brc_db/cimaccount_closing_update_form.html'
@@ -319,7 +382,7 @@ class PostCheckerReviewView(View):
             if request.user == p.maker:
                 ctx['msg'] = 'Maker cannot be the same as checker!!!!'
                 return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
-            if  p.maker is None:
+            if p.maker is None:
                 ctx['msg'] = 'Not reviewed by maker'
                 return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
             p.post_checked = p_post.post_checked

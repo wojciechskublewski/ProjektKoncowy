@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% if msg1 %}
+    <h1 style="color: coral">{{msg1}}</h1>
+    <p><a href='/changes_list/'>Changes review list</a></p>
+    {% else %}
+
+    <h1 style="color: #ba2121">{{msg}}</h1>
+
+    <p>CIM Number: {{c.cim_number}}</p>
+    <p>Change type: {{c.changes.get_change_name_display}} Change date: {{c.changes.change_date}}</p>
+    <p>Fees checked? : {{c.get_fees_checked_display}}</p>
+    <p>Client restrictions updated?: {{c.get_cr_client_restriction_display}}</p>
+    <p>Charles River updated with AA /BG / CIM System: {{c.get_cr_aa_br_system_display}} </p>
+    <p>Charles River updated with SA: {{c.get_cr_sa_display}} </p>
+    <p>Comments: {{c.comment}} </p>
+    <p>Maker: {{c.change_maker}} Maker date: {{c.change_maker_date}}</p>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}<br>
+        <input type="submit" VALUE="OK">
+    </form>
+
+    {% endif %}
+</body>
+</html>

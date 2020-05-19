@@ -8,7 +8,10 @@
 
 {% for c in change %}
 
-    <p>{{c.cim_number}}, {{c.change.change_date}} {{c.change.get_change_name_display}}</p>
+    <p>{{c.cim_number}}, {{c.change.change_date}} {{c.change.get_change_name_display}}
+        <a href="/changes_maker_review/{{c.id}}/">Maker Review</a>
+        <a href="/changes_checker_review/{{c.id}}/">Checker Review</a>
+    </p>
 
 {% endfor %}
 </body>

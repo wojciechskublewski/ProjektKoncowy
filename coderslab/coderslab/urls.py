@@ -37,5 +37,7 @@ urlpatterns = [
     path('pre_checker_checklist/<pk>/', PreCheckerReviewView.as_view(), name='pre_checker_checklist'),
     path('post_maker_checklist/<pk>/', MakerPostChecklistView.as_view(), name='post_maker_checklist'),
     path('post_checker_checklist/<pk>/', PostCheckerReviewView.as_view(), name='post_checker_checklist'),
+    path('changes_maker_review/<pk>/', ChangesReviewMakerView.as_view(), name='change_maker_checklist'),
+    path('changes_checker_review/<pk>/', ChangesCheckerReviewView.as_view(), name='change_checker_checklist'),
 
 ]

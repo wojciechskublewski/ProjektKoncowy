@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    {% if msg %}
+    <h1 style="color: coral">{{msg}}</h1>
+    <p><a href='/post_list/'>Post acceptance list</a></p>
+    {% else %}
+
+    {{c.cim_number}}
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}<br>
+        <input type="submit" VALUE="OK">
+    </form>
+    {% endif%}
+
+
+</body>
+</html>

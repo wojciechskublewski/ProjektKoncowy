@@ -139,6 +139,7 @@ class ChangesReview(models.Model):
     cim_number = models.ForeignKey(CIMAccount, on_delete=models.CASCADE)
     change = models.ForeignKey(Changes, on_delete=models.CASCADE)
     fees_checked = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
+    ke_knowledge = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_client_restriction = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_aa_br_system = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)
     cr_sa = models.IntegerField(choices=CHECKLIST_VALUES, null=True, blank=True)

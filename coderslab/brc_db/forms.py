@@ -55,5 +55,16 @@ class PreCheckerReviewForm(ModelForm):
         fields = ['pre_checked']
 
 
+class ChangesReviewMakerForm(ModelForm):
+    class Meta:
+        model = ChangesReview
+        fields = ['fees_checked', 'cr_client_restriction', 'cr_aa_br_system',
+                  'cr_sa', 'ke_knowledge', 'comment']
+
+
+class ChangesReviewCheckerForm(ModelForm):
+    class Meta:
+        model = ChangesReview
+        fields = ['change_checked']
 
 

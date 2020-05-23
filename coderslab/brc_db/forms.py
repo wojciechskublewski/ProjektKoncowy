@@ -2,6 +2,7 @@ from django.contrib.admin.widgets import AdminDateWidget
 
 from .models import *
 from django.forms import ModelForm, forms, widgets
+from django import forms
 
 
 
@@ -88,6 +89,10 @@ class ChangesReviewCheckerForm(ModelForm):
         if checked is None or checked is False:
             raise forms.ValidationError('Potwierdz ze sprawdziles wszystkie zmiany!')
 
+
+class LoginForm(forms.Form):
+    login = forms.CharField(label="login", max_length=64)
+    password = forms.CharField(label="password", max_length=64, widget=forms.PasswordInput)
 
 
 

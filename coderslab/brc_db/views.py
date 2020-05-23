@@ -1,11 +1,13 @@
 from django.shortcuts import render, HttpResponse, redirect
 from .forms import *
 from .models import *
-from django.views.generic.edit import  FormView, CreateView, UpdateView
+from django.views.generic.edit import FormView, CreateView, UpdateView
 from django.views import View
 from django.views.generic import TemplateView
 from django.db.models import Prefetch
 from .functions import *
+from django.contrib.auth import *
+
 
 # Create your views here.
 
@@ -20,6 +22,7 @@ class OpenCIMView(View):
         form = CIMAccountOpenForm()
         ctx = {'form': form}
         return render(request, 'brc_db/cimaccount_form.html', ctx)
+
     def post(self, request):
         form = CIMAccountOpenForm(request.POST)
         ctx = {'form': form}
@@ -42,7 +45,6 @@ class OpenCIMView(View):
             post.save()
             return render(request, 'base.html')
         return render(request, 'brc_db/cimaccount_form.html', ctx)
-
 
     # model = CIMAccount
     # success_url = '/'
@@ -167,7 +169,7 @@ class ChangesCheckerReviewView(View):
     def get(self, request, pk):
         change = ChangesReview.objects.get(id=pk)
         if change.change_checker is not None:
-            ctx = { 'msg1': 'Change is already done!!!'}
+            ctx = {'msg1': 'Change is already done!!!'}
             return render(request, 'brc_db/changes_checker_review.html', ctx)
         form = ChangesReviewCheckerForm
         ctx = {
@@ -318,7 +320,7 @@ class POSTReviewNotDoneListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['post'] = POSTReview.objects.filter(cim_number__closed=False).\
+        ctx['post'] = POSTReview.objects.filter(cim_number__closed=False). \
             filter(post_checker_date__isnull=True).order_by('cim_number')
         return ctx
 
@@ -389,4 +391,31 @@ class PostCheckerReviewView(View):
             post_acc_checklist_pdf(pk)
             return redirect('/post_list')
         return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
+
+
+class LoginView(FormView):
+    template_name = 'brc_db/login.html'
+    form_class = LoginForm
+
+    def form_valid(self, form):
+        username = form.cleaned_data['login']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            print("Zautentykowano, logowanie..", user)
+            login(self.request, user)
+            return redirect('/')
+        else:
+            ctx = {
+                'msg': "Nie udało się zauntntykować",
+                'form': LoginForm(self.request.POST)
+            }
+            return render(self.request, 'brc_db/login.html', ctx)
+
+
+class CIMDetailsView(View):
+    def get(self, request, cim):
+        ctx = {'cim': CIMAccount.objects.get(cim_number=cim)}
+        return render(request, 'brc_db/cim_details.html', ctx)
+
 

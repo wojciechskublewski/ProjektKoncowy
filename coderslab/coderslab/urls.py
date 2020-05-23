@@ -13,12 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.contrib.admin import site
 from django.urls import path
 from brc_db.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+
+    path('admin/', site.urls),
+    path('login/', LoginView.as_view(), name='login_view'),
     path('', BaseView.as_view(), name='base_view'),
     path('add_CIM/', OpenCIMView.as_view(), name='add_cim'),
     path('add_PM/', PMCreateView.as_view(), name='add_pm'),
@@ -39,5 +41,6 @@ urlpatterns = [
     path('post_checker_checklist/<pk>/', PostCheckerReviewView.as_view(), name='post_checker_checklist'),
     path('changes_maker_review/<pk>/', ChangesReviewMakerView.as_view(), name='change_maker_checklist'),
     path('changes_checker_review/<pk>/', ChangesCheckerReviewView.as_view(), name='change_checker_checklist'),
+    path('cim_details/<cim>/', CIMDetailsView.as_view(), name='cim_details'),
 
 ]

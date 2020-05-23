@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, HttpResponse, redirect
 from .forms import *
 from .models import *
@@ -12,9 +13,23 @@ from django.contrib.auth import *
 # Create your views here.
 
 
-class BaseView(View):
+class BaseView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'base.html')
+        form = CIMSearchForm
+        ctx = {
+            'form': form
+        }
+        return render(request, 'base.html', ctx)
+
+    def post(self, request):
+        form = CIMSearchForm(request.POST)
+        ctx = {
+            'form': form
+        }
+        if form.is_valid():
+            cim = form.cleaned_data['cim_number']
+            return redirect(f'cim_details/{cim}')
+        return render(request, 'base.html', ctx)
 
 
 class OpenCIMView(View):
@@ -165,7 +180,9 @@ class ChangesReviewMakerView(View):
         return render(request, 'brc_db/changes_maker_review.html', ctx)
 
 
-class ChangesCheckerReviewView(View):
+class ChangesCheckerReviewView(PermissionRequiredMixin, View):
+    permission_required = ('brc_db.can_validate',)
+
     def get(self, request, pk):
         change = ChangesReview.objects.get(id=pk)
         if change.change_checker is not None:
@@ -320,8 +337,9 @@ class POSTReviewNotDoneListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['post'] = POSTReview.objects.filter(cim_number__closed=False). \
+        post = POSTReview.objects.filter(cim_number__closed=False). \
             filter(post_checker_date__isnull=True).order_by('cim_number')
+        ctx['post'] = post
         return ctx
 
 
@@ -363,18 +381,22 @@ class PostCheckerReviewView(View):
             }
             return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
         form = PostCheckerReviewForm
+        form1 = CheckerMailForm
         ctx = {
             'form': form,
-            'p': p
+            'form1': form1,
+            'p': p,
         }
         return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
 
     def post(self, request, pk):
         form = PostCheckerReviewForm(request.POST)
+        form1 = CheckerMailForm(request.POST)
         p = POSTReview.objects.get(id=pk)
         ctx = {
             'form': form,
-            'p': p
+            'form1': form1,
+            'p': p,
         }
         if form.is_valid():
             p_post = form.instance
@@ -390,6 +412,11 @@ class PostCheckerReviewView(View):
             p.save()
             post_acc_checklist_pdf(pk)
             return redirect('/post_list')
+        if form1.is_valid():
+            mail_subject = f'PAR for {p.cim_number} rejected by Checker!'
+            mail_message = form1.cleaned_data['comment']
+            send_mail(p.maker.email, mail_subject, mail_message)
+            return redirect('/post_list/')
         return render(request, 'brc_db/post_checker_checklist_update_form.html', ctx)
 
 
@@ -415,7 +442,12 @@ class LoginView(FormView):
 
 class CIMDetailsView(View):
     def get(self, request, cim):
-        ctx = {'cim': CIMAccount.objects.get(cim_number=cim)}
+        try:
+            cim = CIMAccount.objects.get(cim_number=cim)
+            ctx = {'cim': cim}
+        except:
+            return redirect('/')
         return render(request, 'brc_db/cim_details.html', ctx)
+
 
 

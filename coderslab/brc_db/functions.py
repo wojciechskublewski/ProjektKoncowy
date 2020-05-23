@@ -1,6 +1,9 @@
 import jinja2
 import pdfkit
 from .models import *
+import smtplib, ssl
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 def post_acc_checklist_pdf(pk):
@@ -32,5 +35,22 @@ def post_acc_checklist_pdf(pk):
     html_file.write(out_put_text)
     html_file.close()
     pdfkit.from_file(html_file_name, pdf_file_name)
+
+
+def send_mail(maker_mail, mail_subject, mail_message):
+    port = 465
+    smtp_server = "smtp.gmail.com"
+    sender_email = "wojciech.skublewski@gmail.com"
+    receiver_email = maker_mail
+    password = input("Type your password and press enter: ")
+    message = MIMEMultipart()
+    message['Subject'] = mail_subject
+    message.attach(MIMEText(mail_message, 'plain'))
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
+
+
 
 

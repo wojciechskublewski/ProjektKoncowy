@@ -95,4 +95,9 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="password", max_length=64, widget=forms.PasswordInput)
 
 
+class CIMSearchForm(forms.Form):
+    cim_number = forms.CharField(label='cim_number', max_length=4)
 
+
+class CheckerMailForm(forms.Form):
+    comment = forms.CharField(label="Comment to maker", widget=forms.Textarea)

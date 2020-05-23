@@ -5,9 +5,15 @@
     <title>Title</title>
 </head>
 <body>
+{% if cim == None %}
+
+    <h1>Nie ma takiego CIM number</h1>
+
+{% else %}
 
 <h1>{{cim.cim_number}}</h1>
 <p>Funded amount {{cim.funded_amount}}</p>
 
+{% endif %}
 </body>
 </html>

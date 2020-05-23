@@ -128,6 +128,17 @@ class POSTReview(models.Model):
     post_checker_date = models.DateField(null=True, blank=True)
     post_checker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='post_checker', blank=True)
 
+    @property
+    def number_post_days(self):
+        if self.cim_number.funded:
+            return (datetime.datetime.now().date() - self.cim_number.funded_date).days
+        else:
+            return (datetime.datetime.now().date() - self.cim_number.open_date).days
+
+    @property
+    def number_days_checked(self):
+        return (self.post_checker_date - self.cim_number.funded_date).days
+
 
 class Changes(models.Model):
     cim_number = models.ForeignKey(CIMAccount, on_delete=models.CASCADE)
@@ -148,5 +159,12 @@ class ChangesReview(models.Model):
     change_maker_date = models.DateField(null=True, blank=True)
     change_maker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='change_maker', blank=True)
     change_checker_date = models.DateField(null=True, blank=True)
-    change_checker = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='change_checker', blank=True)
+    change_checker = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
+                                       related_name='change_checker', blank=True)
+
+    class Meta:
+        permissions = (
+            ('can_review', 'Maker review'),
+            ('can_validate', 'Checker review')
+        )
 

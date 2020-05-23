@@ -7,8 +7,11 @@
 <body>
 {% for c in post %}
 
-    <p>{{c.cim_number}}, Date Open: {{c.cim_number.open_date}} Maker Date: {{c.post_maker_date}}
-        {{c.maker}}
+    <p>{{c.cim_number }}, Date Open: {{c.cim_number.open_date}} Maker Date: {{c.post_maker_date}}
+
+
+        Days since acc open / funded {{ c.number_post_days}}
+
         <a href='/post_maker_checklist/{{c.id}}/'>Maker review</a>,
         <a href='/post_checker_checklist/{{c.id}}/'>Checker review</a>
     </p>

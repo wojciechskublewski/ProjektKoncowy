@@ -42,5 +42,8 @@ urlpatterns = [
     path('changes_maker_review/<pk>/', ChangesReviewMakerView.as_view(), name='change_maker_checklist'),
     path('changes_checker_review/<pk>/', ChangesCheckerReviewView.as_view(), name='change_checker_checklist'),
     path('cim_details/<cim>/', CIMDetailsView.as_view(), name='cim_details'),
+    path('pars_date_search/', PARDateQuery.as_view(), name='par_date_search'),
+    path('pars_date_search_to_excel/<start_date>/<end_date>/', PARDateSearchToExcel.as_view(), name='par_date_search_to_excel'),
+
 
 ]

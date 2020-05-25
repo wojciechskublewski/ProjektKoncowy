@@ -101,3 +101,15 @@ class CIMSearchForm(forms.Form):
 
 class CheckerMailForm(forms.Form):
     comment = forms.CharField(label="Comment to maker", widget=forms.Textarea)
+
+
+class DateSearchForm(forms.Form):
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        if start_date > end_date:
+            raise forms.ValidationError('start date nie moze byc wieksza niz end date')

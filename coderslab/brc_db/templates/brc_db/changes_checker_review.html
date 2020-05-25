@@ -27,6 +27,12 @@
         <input type="submit" VALUE="OK">
     </form>
 
+        <form method="post">
+        {% csrf_token %}
+        {{form1.as_p}}<br>
+        <input type="submit" VALUE="OK">
+        </form>
+
     {% endif %}
 </body>
 </html>

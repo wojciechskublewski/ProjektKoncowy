@@ -5,9 +5,11 @@ from .models import *
 from django.views.generic.edit import FormView, CreateView, UpdateView
 from django.views import View
 from django.views.generic import TemplateView
-from django.db.models import Prefetch
 from .functions import *
 from django.contrib.auth import *
+from django.core.mail import send_mail
+from coderslab.settings import EMAIL_HOST_USER
+import pandas as pd
 
 
 # Create your views here.
@@ -138,7 +140,7 @@ class ChangesCreateView(View):
             c_review.cim_number = c.cim_number
             c_review.change = c
             c_review.save()
-            return render(request, 'base.html')
+            return redirect('/changes_list/')
         return render(request, 'brc_db/change_form.html', ctx)
 
 
@@ -189,18 +191,22 @@ class ChangesCheckerReviewView(PermissionRequiredMixin, View):
             ctx = {'msg1': 'Change is already done!!!'}
             return render(request, 'brc_db/changes_checker_review.html', ctx)
         form = ChangesReviewCheckerForm
+        form1 = CheckerMailForm
         ctx = {
             'form': form,
-            'c': change
+            'c': change,
+            'form1': form1
         }
         return render(request, 'brc_db/changes_checker_review.html', ctx)
 
     def post(self, request, pk):
         change = ChangesReview.objects.get(id=pk)
         form = ChangesReviewCheckerForm(request.POST, instance=change)
+        form1 = CheckerMailForm(request.POST)
         ctx = {
             'form': form,
-            'c': change
+            'c': change,
+            'form1': form1
         }
         if form.is_valid():
             if change.change_maker is None:
@@ -213,6 +219,12 @@ class ChangesCheckerReviewView(PermissionRequiredMixin, View):
             change.change_checker = request.user
             change.change_checker_date = datetime.datetime.now().date()
             change.save()
+            return redirect('/changes_list/')
+        if form1.is_valid():
+            mail_message = form1.cleaned_data['comment']
+            mail_subject = f'Change review {change.cim_number} to be updated'
+            send_mail(subject=mail_subject, message=mail_message,
+                      from_email=EMAIL_HOST_USER, recipient_list=[change.change_maker.email], fail_silently=False)
             return redirect('/changes_list/')
         return render(request, 'brc_db/changes_checker_review.html', ctx)
 
@@ -244,18 +256,8 @@ class FundedAccountUpdateView(View):
             cim.funded_date = c.funded_date
             cim.funded_amount = c.funded_amount
             cim.save()
-            return render(request, 'base.html')
+            return redirect('/')
         return render(request, 'brc_db/cimaccount_funded_update_form.html', {'form': form, 'cim': cim})
-
-    model = CIMAccount
-    template_name = 'brc_db/cimaccount_funded_update_form.html'
-
-    success_url = '/'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['cim'] = self.object.cim_number
-        return context
 
 
 class MakerPreChecklistView(View):
@@ -303,18 +305,22 @@ class PreCheckerReviewView(View):
             }
             return render(request, 'brc_db/pre_checker_checklist_update_form.html', ctx)
         form = PreCheckerReviewForm
+        form1 = CheckerMailForm
         ctx = {
             'form': form,
-            'p': pre
+            'p': pre,
+            'form1': form1
         }
         return render(request, 'brc_db/pre_checker_checklist_update_form.html', ctx)
 
     def post(self, request, pk):
         form = PreCheckerReviewForm(request.POST)
+        form1 = CheckerMailForm(request.POST)
         pre = PREReview.objects.get(id=pk)
         ctx = {
             'form': form,
-            'p': pre
+            'p': pre,
+            'form1': form1
         }
         if form.is_valid():
             pre_post = form.instance
@@ -329,6 +335,13 @@ class PreCheckerReviewView(View):
             pre.pre_checker = request.user
             pre.save()
             return redirect('/pre_review_list')
+        if form1.is_valid():
+            mail_message = form1.cleaned_data['comment']
+            mail_subject = f'PRE Acceptance {pre.cim_number} to be updated'
+            send_mail(subject=mail_subject, message=mail_message,
+                      from_email=EMAIL_HOST_USER, recipient_list=[pre.pre_maker.email], fail_silently=False)
+            return redirect('/pre_review_list/')
+
         return render(request, 'brc_db/pre_checker_checklist_update_form.html', ctx)
 
 
@@ -368,7 +381,7 @@ class MakerPostChecklistView(View):
             p.post_maker_date = datetime.datetime.now().date()
             p.maker = request.user
             p.save()
-            return render(request, 'base.html')
+            return redirect('')
         return render(request, 'brc_db/change_form.html', ctx)
 
 
@@ -450,4 +463,50 @@ class CIMDetailsView(View):
         return render(request, 'brc_db/cim_details.html', ctx)
 
 
+class PARDateQuery(View):
+    def get(self, request):
+        form = DateSearchForm
+        ctx = {
+            'form': form
+        }
+        return render(request, 'brc_db/par_date_search.html', ctx)
 
+    def post(self, request):
+        form = DateSearchForm(request.POST)
+        ctx = {
+            'form': form
+        }
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            pars = POSTReview.objects.filter(post_checker_date__gte=start_date, post_checker_date__lte=end_date)
+            ctx = {
+                'form': form,
+                'pars': pars,
+                'msg': 'wyniki zapytania',
+                'start_date': start_date,
+                'end_date': end_date
+            }
+            return render(request, 'brc_db/par_date_search.html', ctx)
+        return render(request, 'brc_db/par_date_search.html', ctx)
+
+
+class PARDateSearchToExcel(View):
+    def get(self, request, start_date, end_date):
+        try:
+            panda_data = []
+            pars = POSTReview.objects.filter(post_checker_date__gte=start_date,
+                                             post_checker_date__lte=end_date)
+            print(pars)
+            for par in pars:
+                list_pd = [par.cim_number.cim_number, par.post_maker_date, par.post_checker_date,
+                           par.cim_number.funded_date, par.cim_number.funded_amount, par.maker, par.post_checker]
+                panda_data.append(list_pd)
+
+            panda_dada = pd.DataFrame(panda_data, columns=['CIM_number', 'Maker_date', 'Checker_date', 'Funded date',
+                                                           'Funded_amount', 'Maker', 'Checker'])
+            file_name = f'Par done {start_date} - {end_date}.csv'
+            panda_dada.to_csv(file_name)
+            return HttpResponse("File save on the share drive!")
+        except:
+            return HttpResponse("Please check input data!")

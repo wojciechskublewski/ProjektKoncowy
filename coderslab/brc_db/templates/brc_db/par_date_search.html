@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}<br>
+        <input type="submit" VALUE="OK">
+    </form>
+
+
+    {% if msg %}
+       <h1 style="color: darkorange"> {{msg}} </h1>
+    <table>
+            <tr>
+                <th>CIM</th>
+                <th>CIM maker date</th>
+                <th>CIM checker date</th>
+                <th>CIM funded date</th>
+                <th>CIM funded amount</th>
+                <th>CIM par days</th>
+            </tr>
+        {% for p in pars %}
+            <tr>
+                <td>{{p.cim_number}}</td>
+                <td>{{p.post_maker_date}}</td>
+                <td>{{p.post_checker_date}}</td>
+                <td>{{p.cim_number.funded_date}}</td>
+                <td>{{p.cim_number.funded_amount}}</td>
+                <td>{{p.number_days_checked}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {{start_date|date:'Y-m-d'}}
+    <h5 style="color: greenyellow"><a href='/pars_date_search_to_excel/{{start_date|date:'Y-m-d'}}/{{end_date|date:'Y-m-d'}}/' target="_blank">Excel results download</a></h5>
+    {% endif %}
+
+</body>
+</html>

@@ -381,7 +381,7 @@ class MakerPostChecklistView(View):
             p.post_maker_date = datetime.datetime.now().date()
             p.maker = request.user
             p.save()
-            return redirect('')
+            return redirect('/post_list/')
         return render(request, 'brc_db/change_form.html', ctx)
 
 
@@ -447,7 +447,7 @@ class LoginView(FormView):
             return redirect('/')
         else:
             ctx = {
-                'msg': "Nie udało się zauntntykować",
+                 'msg': "Nie udało się zauntntykować",
                 'form': LoginForm(self.request.POST)
             }
             return render(self.request, 'brc_db/login.html', ctx)

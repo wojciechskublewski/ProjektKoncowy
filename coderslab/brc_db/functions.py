@@ -27,7 +27,7 @@ def post_acc_checklist_pdf(pk):
                                    maser=post.maker,
                                    post_maker_date=post.post_maker_date,
                                    post_checker_date=post.post_checker_date,
-                                   post_checker=post.post_checker
+                                   post_checker=post.post_checker,
                                    )
     html_file_name = f'post_acceptance_checklist {post.cim_number}.html'
     pdf_file_name = f'post_acceptance_checklist {post.cim_number}.pdf'
@@ -52,5 +52,5 @@ def send_mail(maker_mail, mail_subject, mail_message):
         server.sendmail(sender_email, receiver_email, message.as_string())
 
 
-
+post_acc_checklist_pdf(12)
 

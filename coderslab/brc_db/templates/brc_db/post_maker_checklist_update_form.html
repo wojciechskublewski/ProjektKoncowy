@@ -10,7 +10,13 @@
     <p><a href='/post_list/'>Post acceptance list</a></p>
     {% else %}
 
-    {{cim}}, {{cim.funded_date}}, {{cim.funded_amount}} <a href='/update_funded_CIM/{{cim.id}}/'>Update funding details</a>
+    <p>{{cim}}, {{cim.funded_date}}, {{cim.funded_amount}} <a href='/update_funded_CIM/{{cim.id}}/'>Update funding details</a></p>
+    <p>Client restrictions: {{cim.client_restrictions}}</p>
+    <p>Client special templates:
+        {% for i in cim.special_templates.all %}
+        {{i}},
+        {% endfor %}
+    </p>
     <form method="post">
         {% csrf_token %}
         {{form.as_p}}<br>

@@ -14,25 +14,30 @@
 
 </head>
 <body>
-{% load bootstrap4 %}
-{% include 'header.html' %}
 
+{% include 'header.html' %}
+{% load bootstrap %}
+    <div class="container">
    <form method="post">
         {% csrf_token %}
-        {{ form }}
+        {{ form|bootstrap_horizontal:'col-sm-4' }}
         <input type="submit" class="btn btn-success" value="Search" />
     </form>
+    </div>
 
     <div class="container">
   <div class="row">
-    <div class="col-sm">
-      One of three columns
+    <div class="col-sm p-3 mb-2 bg-secondary text-white">
+      List of opened accounts:
+        <table>
+
+        </table>
     </div>
-    <div class="col-sm">
-      One of three columns
+    <div class="col-sm p-3 mb-2 bg-secondary text-white">
+      List of pre acceptance reviews:
     </div>
-    <div class="col-sm">
-      One of three columns
+    <div class="col-sm p-3 mb-2 bg-secondary text-white">
+      List of post acceptance reviews:
     </div>
   </div>
 </div>

@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-
+    <link href="/static/css/style.css" rel="stylesheet" />
     {% endblock%}
 
 </head>
@@ -18,19 +18,28 @@
 {% include 'header.html' %}
 {% load bootstrap %}
     <div class="container">
+        <div class="row">
+        <div class="col-sm">
    <form method="post">
         {% csrf_token %}
-        {{ form|bootstrap_horizontal:'col-sm-4' }}
+        {{ form }}
         <input type="submit" class="btn btn-success" value="Search" />
     </form>
+        </div>
+        <div class="col-sm">
+   <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" class="btn btn-success" value="Search" />
+    </form>
+        </div>
     </div>
-
+    </div>
     <div class="container">
   <div class="row">
     <div class="col-sm p-3 mb-2 bg-secondary text-white">
       List of opened accounts:
         <table>
-
         </table>
     </div>
     <div class="col-sm p-3 mb-2 bg-secondary text-white">
@@ -40,6 +49,21 @@
       List of post acceptance reviews:
     </div>
   </div>
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm">
+                <table>
+                    {% for p in pars %}
+                        <tr>
+                        <td class="td_par_base">{{p.cim_number}}</td>
+                        <td><a href="/post_maker_checklist/{{p.id}}/" class="btn btn-primary">Maker review</a></td>
+                        <td><a href="/post_checker_checklist/{{p.id}}/" class="btn btn-primary">Checker review</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
 </div>
 
 

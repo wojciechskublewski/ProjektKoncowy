@@ -19,8 +19,10 @@ from django.views.generic import RedirectView
 class BaseView(LoginRequiredMixin, View):
     def get(self, request):
         form = CIMSearchForm
+        pars = POSTReview.objects.filter(post_checked=False)[:10]
         ctx = {
-            'form': form
+            'form': form,
+            'pars': pars
         }
         return render(request, 'base.html', ctx)
 

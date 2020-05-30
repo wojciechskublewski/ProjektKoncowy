@@ -18,26 +18,50 @@ from django.views.generic import RedirectView
 
 class BaseView(LoginRequiredMixin, View):
     def get(self, request):
-        form = CIMSearchForm
+        form_details = CIMSearchForm
+        form_update = CIMSearchFormUpdate
         pars = POSTReview.objects.filter(post_checked=False).order_by('cim_number')[:10]
         pres = PREReview.objects.filter(pre_checked=False).order_by('cim_number')[:10]
+        acc = CIMAccount.objects.all().order_by('-cim_number')[:10]
 
         ctx = {
-            'form': form,
+            'form_details': form_details,
+            'form_update': form_update,
             'pars': pars,
-            'pres': pres
+            'pres': pres,
+            'acc': acc
         }
         return render(request, 'base.html', ctx)
 
     def post(self, request):
-        form = CIMSearchForm(request.POST)
+        form_detail = CIMSearchForm(request.POST)
+        form_update = CIMSearchFormUpdate(request.POST)
         ctx = {
-            'form': form
+            'form_detail': form_detail,
+            'form_update': form_update,
         }
-        if form.is_valid():
-            cim = form.cleaned_data['cim_number']
-            return redirect(f'cim_details/{cim}')
-        return render(request, 'base.html', ctx)
+        if form_detail.is_valid():
+            cim = form_detail.cleaned_data['cim_number']
+            return redirect(f'/cim_details/{cim}')
+        if form_update.is_valid():
+            cim_number = form_update.cleaned_data['cim_update']
+            cim = CIMAccount.objects.get(cim_number=cim_number)
+            return redirect(f'/update_CIM/{cim.id}')
+        return render(request, 'brc_db/search.html', ctx)
+
+
+class HeaderSearchView(View):
+    def get(self, request):
+        form_details = CIMSearchForm
+        form_update = CIMSearchFormUpdate
+        ctx = {
+            'form_details': form_details,
+            'from_update': form_update
+        }
+        return render(request, 'header.html', ctx)
+
+    def post(self, request):
+        pass
 
 
 class OpenCIMView(View):

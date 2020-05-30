@@ -96,7 +96,7 @@ class LoginForm(forms.Form):
 
 
 class CIMSearchForm(forms.Form):
-    cim_number = forms.CharField(label='cim_number', max_length=4)
+    cim_number = forms.CharField(label='CIM Details', max_length=4)
 
 
 class CheckerMailForm(forms.Form):
@@ -116,6 +116,6 @@ class DateSearchForm(forms.Form):
 
 
 class CIMSearchFormUpdate(forms.Form):
-    cim_update = forms.CharField(label='cim_update', max_length=4)
+    cim_update = forms.CharField(label='CIM Update', max_length=4)
 
 

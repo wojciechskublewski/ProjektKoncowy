@@ -22,14 +22,14 @@
         <div class="col-sm">
    <form method="post">
         {% csrf_token %}
-        {{ form }}
+        {{ form_details }}
         <input type="submit" class="btn btn-success" value="Search" />
     </form>
         </div>
         <div class="col-sm">
    <form method="post">
         {% csrf_token %}
-        {{ form }}
+        {{ form_update }}
         <input type="submit" class="btn btn-success" value="Search" />
     </form>
         </div>
@@ -50,7 +50,23 @@
     </div>
   </div>
         <div class="row">
-            <div class="col-sm"></div>
+            <div class="col-sm">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>CIM</td>
+                            <td>CIM Update</td>
+                        </tr>
+                        {% for a in acc %}
+                        <tr>
+                            <td><a href="/cim_details/{{a.cim_number}}/">{{a.cim_number}}</a></td>
+                            <td><a href="/update_CIM/{{a.id}}/" class="btn btn-success">Update CIM</a></td>
+
+                        </tr>
+                        {% endfor %}
+                    </thead>
+                </table>
+            </div>
             <div class="col-sm">
                 <table>
                     <thead>

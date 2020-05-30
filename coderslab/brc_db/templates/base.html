@@ -51,14 +51,39 @@
   </div>
         <div class="row">
             <div class="col-sm"></div>
-            <div class="col-sm"></div>
             <div class="col-sm">
                 <table>
+                    <thead>
+                    <tr>
+                        <td>CIM</td>
+                        <td>Maker</td>
+                        <td>Checker</td>
+                    </tr>
+                    </thead>
+                    {% for pr in pres %}
+                        <tr>
+                            <td><a href="/cim_details/{{pr.cim_number}}/" style='color: brown'>{{pr.cim_number}}</a></td>
+                            <td><a href="pre_maker_checklist/{{pr.id}}" class="btn btn-secondary">Maker Review</a></td>
+                            <td><a href="pre_checker_checklist/{{pr.id}}" class="btn btn-secondary">Checker Review</a></td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+            <div class="col-sm">
+                <table>
+                    <tr>
+                        <td>CIM</td>
+                        <td>No of days</td>
+                        <td>Maker</td>
+                        <td>Checker</td>
+                    </tr>
                     {% for p in pars %}
                         <tr>
-                        <td class="td_par_base">{{p.cim_number}}</td>
-                        <td><a href="/post_maker_checklist/{{p.id}}/" class="btn btn-primary">Maker review</a></td>
-                        <td><a href="/post_checker_checklist/{{p.id}}/" class="btn btn-primary">Checker review</a></td>
+                            <td><a href="/cim_details/{{p.cim_number}}/" class="td_par_base">{{p.cim_number}}</a></td>
+                        <td class="td_par_base_par_days" style="">{{p.number_post_days}}</td>
+                        <td><a href="/post_maker_checklist/{{p.id}}/" class="btn btn-primary">Maker rev</a></td>
+                        <td><a href="/post_checker_checklist/{{p.id}}/" class="btn btn-primary">Checker rev</a></td>
                         </tr>
                     {% endfor %}
                 </table>

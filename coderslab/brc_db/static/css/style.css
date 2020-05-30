@@ -1,3 +1,9 @@
 .td_par_base {
     color: forestgreen;
+    text-align: center;
+}
+
+.td_par_base_par_days {
+    color: #CC3434;
+    text-align: center;
 }

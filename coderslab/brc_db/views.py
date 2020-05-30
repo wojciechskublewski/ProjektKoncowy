@@ -19,10 +19,13 @@ from django.views.generic import RedirectView
 class BaseView(LoginRequiredMixin, View):
     def get(self, request):
         form = CIMSearchForm
-        pars = POSTReview.objects.filter(post_checked=False)[:10]
+        pars = POSTReview.objects.filter(post_checked=False).order_by('cim_number')[:10]
+        pres = PREReview.objects.filter(pre_checked=False).order_by('cim_number')[:10]
+
         ctx = {
             'form': form,
-            'pars': pars
+            'pars': pars,
+            'pres': pres
         }
         return render(request, 'base.html', ctx)
 

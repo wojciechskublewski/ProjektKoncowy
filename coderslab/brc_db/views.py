@@ -10,6 +10,7 @@ from django.contrib.auth import *
 from django.core.mail import send_mail
 from coderslab.settings import EMAIL_HOST_USER
 import pandas as pd
+from django.views.generic import RedirectView
 
 
 # Create your views here.
@@ -447,7 +448,7 @@ class LoginView(FormView):
             return redirect('/')
         else:
             ctx = {
-                 'msg': "Nie udało się zauntntykować",
+                'msg': "Nie udało się zauntntykować",
                 'form': LoginForm(self.request.POST)
             }
             return render(self.request, 'brc_db/login.html', ctx)
@@ -535,3 +536,11 @@ class CIMSearchView(View):
             cim = CIMAccount.objects.get(cim_number=cim_number)
             return redirect(f'/update_CIM/{cim.id}')
         return render(request, 'brc_db/search.html', ctx)
+
+
+class LogoutAndRedirectView(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        logout(self.request)
+        return '/'

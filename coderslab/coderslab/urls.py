@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('admin/', site.urls),
     path('login/', LoginView.as_view(), name='login_view'),
+    path('logout/', LogoutAndRedirectView.as_view(), name='logout_view'),
     path('', BaseView.as_view(), name='base_view'),
     path('add_CIM/', OpenCIMView.as_view(), name='add_cim'),
     path('add_PM/', PMCreateView.as_view(), name='add_pm'),

@@ -510,3 +510,28 @@ class PARDateSearchToExcel(View):
             return HttpResponse("File save on the share drive!")
         except:
             return HttpResponse("Please check input data!")
+
+
+class CIMSearchView(View):
+    def get(self, request):
+        ctx = {
+            'form_detail': CIMSearchForm,
+            'form_update': CIMSearchFormUpdate,
+        }
+        return render(request, 'brc_db/search.html', ctx)
+
+    def post(self, request):
+        form_detail = CIMSearchForm(request.POST)
+        form_update = CIMSearchFormUpdate(request.POST)
+        ctx = {
+            'form_detail': form_detail,
+            'form_update': form_update,
+        }
+        if form_detail.is_valid():
+            cim = form_detail.cleaned_data['cim_number']
+            return redirect(f'/cim_details/{cim}')
+        if form_update.is_valid():
+            cim_number = form_update.cleaned_data['cim_update']
+            cim = CIMAccount.objects.get(cim_number=cim_number)
+            return redirect(f'/update_CIM/{cim.id}')
+        return render(request, 'brc_db/search.html', ctx)

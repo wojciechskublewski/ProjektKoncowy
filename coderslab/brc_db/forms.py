@@ -113,3 +113,9 @@ class DateSearchForm(forms.Form):
         end_date = cleaned_data.get('end_date')
         if start_date > end_date:
             raise forms.ValidationError('start date nie moze byc wieksza niz end date')
+
+
+class CIMSearchFormUpdate(forms.Form):
+    cim_update = forms.CharField(label='cim_update', max_length=4)
+
+

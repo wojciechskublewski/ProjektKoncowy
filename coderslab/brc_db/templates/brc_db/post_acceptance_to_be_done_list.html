@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <title>Title</title>
 </head>
 <body>
+{% include 'header.html' %}
+
 {% for c in post %}
 
     <p>{{c.cim_number }}, Date Open: {{c.cim_number.open_date}} Maker Date: {{c.post_maker_date}}

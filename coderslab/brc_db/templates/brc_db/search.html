@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Title</title>
+</head>
+<body>
+    {% include 'header.html' %}
+    {% load bootstrap %}
+    <div class="container-sm">
+        <h4 style="color: #5897fb">CIM details search</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{form_detail|bootstrap_horizontal:'col-lg-4'}}<br>
+        <input type="submit" class="btn btn-primary" VALUE="CIM details">
+    </form>
+    </div>
+    <p></p>
+    <div class="container-sm">
+        <h4 style="color: #5897fb">CIM update search</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{form_update|bootstrap_horizontal:'col-lg-4'}}<br>
+        <input type='submit' class="btn btn-primary" VALUE="CIM update">
+    </form>
+    </div>
+
+</body>
+</html>

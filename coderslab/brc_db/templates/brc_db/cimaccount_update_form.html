@@ -12,8 +12,12 @@
     <form method="post">
         {% csrf_token %}
         {{form.as_p}}<br>
-        <input type="submit" VALUE="OK">
+        <input type="submit" VALUE="Update CIM" class="btn btn-primary">
     </form>
+    <p></p>
+    <a href="/update_closing_CIM/{{cim.id}}/" class="btn btn-warning">Update closing details</a>
+    <a href="/update_funded_CIM/{{cim.id}}/" class="btn btn-warning">Update funding details</a>
+
 </div>
 </body>
 </html>

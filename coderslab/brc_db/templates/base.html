@@ -17,24 +17,7 @@
 
 {% include 'header.html' %}
 {% load bootstrap %}
-    <div class="container">
-        <div class="row">
-        <div class="col-sm">
-   <form method="post">
-        {% csrf_token %}
-        {{ form_details }}
-        <input type="submit" class="btn btn-success" value="Search" />
-    </form>
-        </div>
-        <div class="col-sm">
-   <form method="post">
-        {% csrf_token %}
-        {{ form_update }}
-        <input type="submit" class="btn btn-success" value="Search" />
-    </form>
-        </div>
-    </div>
-    </div>
+
     <div class="container">
   <div class="row">
     <div class="col-sm p-3 mb-2 bg-secondary text-white">

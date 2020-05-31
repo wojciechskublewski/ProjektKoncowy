@@ -73,29 +73,16 @@ class OpenCIMView(View):
         ctx = {'form': form}
         if form.is_valid():
             c = form.instance
-            # c = CIMAccount()
-            # c.cim_number = form.cleaned_data['cim_number']
-            # c.lv = form.cleaned_data['lv_name']
-            # c.region = form.cleaned_data['region']
-            # c.pm = form.cleaned_data['pm']
-            # c.eg_number = form.cleaned_data['eg_number']
-            # c.client_restrictions = form.cleaned_data['client_restrictions']
-            # c.special_templates = form.cleaned_data['special_templates']
             c.save()
+            c.special_templates.set(form.cleaned_data['special_templates'])
             pre = PREReview()
             pre.cim_number = c
             pre.save()
             post = POSTReview()
             post.cim_number = c
             post.save()
-            return render(request, 'base.html')
+            return redirect('/')
         return render(request, 'brc_db/cimaccount_form.html', ctx)
-
-    # model = CIMAccount
-    # success_url = '/'
-    # #template_name = 'brc_db/cimaccount_form.html'
-    # #form_class = CIMAccountOpenForm
-    # fields = ['cim_number', 'lv_name', 'region', 'pm', 'eg_number', 'open_date', 'client_restrictions', 'special_templates']
 
 
 class PMCreateView(CreateView):
@@ -118,7 +105,7 @@ class UpdateCIMView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cim'] = self.object.cim_number
+        context['cim'] = self.object
         return context
 
 

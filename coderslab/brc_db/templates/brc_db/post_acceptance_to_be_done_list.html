@@ -8,6 +8,7 @@
 <body>
 {% include 'header.html' %}
 
+<div class="container">
 {% for c in post %}
 
     <p>{{c.cim_number }}, Date Open: {{c.cim_number.open_date}} Maker Date: {{c.post_maker_date}}
@@ -20,6 +21,8 @@
     </p>
 
 {% endfor %}
+
+</div>
 </body>
 </body>
 </html>

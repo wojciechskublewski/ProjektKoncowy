@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+
 </head>
 <body>
+{% include 'header.html' %}
+<div class="container">
 {% if cim == None %}
 
     <h1>Nie ma takiego CIM number</h1>
@@ -16,5 +21,6 @@
 <p>Pre maker {{cim.cim_number.pre_checker_date}}</p>
 
 {% endif %}
+</div>
 </body>
 </html>

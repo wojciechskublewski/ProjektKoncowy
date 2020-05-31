@@ -52,16 +52,14 @@ class BaseView(LoginRequiredMixin, View):
 
 class HeaderSearchView(View):
     def get(self, request):
-        form_details = CIMSearchForm
-        form_update = CIMSearchFormUpdate
+        form_details = CIMSearchForm(request.GET)
         ctx = {
-            'form_details': form_details,
-            'from_update': form_update
+            'form': form_details,
         }
+        if form_details.is_valid():
+            cim_number = form_details.cleaned_data['cim_number']
+            return redirect(f'/cim_details/{cim_number}/')
         return render(request, 'header.html', ctx)
-
-    def post(self, request):
-        pass
 
 
 class OpenCIMView(View):
@@ -565,6 +563,9 @@ class CIMSearchView(View):
             cim = CIMAccount.objects.get(cim_number=cim_number)
             return redirect(f'/update_CIM/{cim.id}')
         return render(request, 'brc_db/search.html', ctx)
+
+
+
 
 
 class LogoutAndRedirectView(RedirectView):

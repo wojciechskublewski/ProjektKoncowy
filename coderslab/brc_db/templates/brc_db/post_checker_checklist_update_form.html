@@ -9,37 +9,80 @@
 </head>
 <body>
 {% include 'header.html' %}
+{% load bootstrap %}
 <div class="container">
+    <div class="col-md-8 mx-auto">
     {% if msg1 %}
     <h1 style="color: coral">{{msg1}}</h1>
     <p><a href='/post_list/'>Post acceptance list</a></p>
     {% else %}
 
     <h1 style="color: #ba2121">{{msg}}</h1>
-
-    <p>CIM Number: {{p.cim_number}}</p>
-    <p>Funding details: {{p.cim_number.funded_date}}, {{p.cim_number.funded_amount}}</p>
-    <p>Fees checked and in line: {{p.get_fees_checked_display}}</p>
-    <p>Letter was sent to the client: {{p.get_letter_sent_display}} </p>
-    <p>Asset allocation / CIM System / Business Guidelines added to Charles River: {{p.get_cr_aa_bg_system_display}} </p>
-    <p>Client restrictions added to Charles River: {{p.get_cr_client_restriction_display}} </p>
-    <p>Substantial affiliation added to Charles River: {{p.get_cr_sa_display}}</p>
-    <p>Comment: {{p.comment}}</p>
-    <p>Maker: {{p.maker}} Maker date: {{p.post_maker_date}}</p>
+        <table class="table">
+  <thead class="thead-warning">
+    <tr class="table-danger">
+      <th scope="col">CIM</th>
+      <th scope="col">{{p.cim_number}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Funded date</th>
+      <td>{{p.cim_number.funded_date}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Funded amount</th>
+      <td>{{p.cim_number.funded_amount}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Fees checked and in line</th>
+      <td>{{p.get_fees_checked_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Restriction Letter was sent</th>
+      <td>{{p.get_letter_sent_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">AA / CIM System / BG added to CR</th>
+      <td>{{p.get_cr_aa_bg_system_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Client restriction added to CR</th>
+      <td>{{p.get_cr_client_restriction_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Substantial affiliation updated</th>
+      <td>{{p.get_cr_sa_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Comment</th>
+      <td>{{p.comment}}</td>
+    </tr>
+      <tr>
+      <th scope="row">Maker</th>
+      <td>{{p.maker}}</td>
+    </tr>
+        <tr>
+      <th scope="row">Maker review date</th>
+      <td>{{p.post_maker_date}}</td>
+    </tr>
+  </tbody>
+</table>
     <form method="post">
         {% csrf_token %}
-        {{form.as_p}}<br>
-        <input type="submit" VALUE="OK">
+        {{form|bootstrap}}<br>
+        <input class="btn btn-primary" type="submit" VALUE="Validate Review">
     </form>
 
     <form method="post">
         {% csrf_token %}
-        {{form1.as_p}}<br>
-        <input type="submit" VALUE="OK">
+        {{form1|bootstrap}}<br>
+        <input type="submit" VALUE="Send comment to maker">
     </form>
 
 
     {% endif %}
+    </div>
 </div>
 </body>
 </html>

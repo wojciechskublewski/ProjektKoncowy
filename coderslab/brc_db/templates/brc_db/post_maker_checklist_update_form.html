@@ -7,25 +7,60 @@
 </head>
 <body>
 {% include 'header.html' %}
+{% load bootstrap %}
 <div class="container">
+    <div class="col-md-6">
     {% if msg %}
     <h1 style="color: coral">{{msg}}</h1>
     <p><a href='/post_list/'>Post acceptance list</a></p>
     {% else %}
+    <div class="p-2 bg-primary text-white">CIM {{cim}}</div>
+    <table class="table table-bordered">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">Funded Date</th>
+          <th scope="col">Funded Amount</th>
+          <th scope="col">Update Details</th>
+        </tr>
+      </thead>
+        <tr>
+            <td>{{cim.funded_date}}</td>
+            <td>{{cim.funded_amount}}</td>
+            <td><a class="btn btn-primary" href='/update_funded_CIM/{{cim.id}}/'>Update funding details</a></td>
+        </tr>
+    </table>
+        <table class="table table-bordered">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">Client restrictions</th>
+        </tr>
+            <tr>
+                <td>{{cim.client_restrictions}}</td>
+            </tr>
+      </thead>
+        </table>
 
-    <p>{{cim}}, {{cim.funded_date}}, {{cim.funded_amount}} <a href='/update_funded_CIM/{{cim.id}}/'>Update funding details</a></p>
-    <p>Client restrictions: {{cim.client_restrictions}}</p>
-    <p>Client special templates:
-        {% for i in cim.special_templates.all %}
-        {{i}},
-        {% endfor %}
-    </p>
+        <table class="table table-bordered">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">Special restrictions</th>
+            </tr>
+          </thead>
+            {% for i in cim.special_templates.all %}
+            <tr>
+                <td>{{i}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div><a class="btn btn-warning" href="/update_CIM/{{cim.id}}/">Update CIM restrictions / Details</a></div>
+        <p></p>
     <form method="post">
         {% csrf_token %}
-        {{form.as_p}}<br>
-        <input type="submit" VALUE="OK">
+        {{form|bootstrap}}<br>
+        <input class="btn btn-primary" type="submit" VALUE='VALIDATE MAKER RESULTS'>
     </form>
     {% endif%}
+ </div>
 </div>
 </body>
 </html>

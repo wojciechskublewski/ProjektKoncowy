@@ -8,12 +8,17 @@
 </head>
 <body>
 {% include 'header.html' %}
+{% load bootstrap %}
 <div class="container">
+    <div class="row">
+    <div class="col-6 col-md-4 mx-auto">
     <form method="post">
         {% csrf_token %}
-        {{form}}<br>
-        <input type="submit" VALUE="ADD">
+        {{form|bootstrap}}<br>
+        <input class="btn btn-primary" type="submit" VALUE="ADD CHANGE">
     </form>
+    </div>
+    </div>
 </div>
 </body>
 </html>

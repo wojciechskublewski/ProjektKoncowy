@@ -7,20 +7,23 @@
 </head>
 <body>
 {% include 'header.html' %}
+{% load bootstrap %}
 <div class="container">
+    <div class="col-md-4">
     {% if msg1 %}
     <h1 style="color: coral">{{msg1}}</h1>
     <p><a href='/pre_review_list/'>Pre acceptance list</a></p>
     {% else %}
+        <span class="d-block p-2 bg-warning">{{pre.cim_number}}</span>
 
-    {{pre.cim_number}}
     <form method="post">
         {% csrf_token %}
-        {{form.as_p}}<br>
-        <input type="submit" VALUE="OK">
+        {{form|bootstrap}}<br>
+        <input class="btn btn-primary" type="submit" VALUE="VALIDATE REVIEW">
     </form>
 
     {% endif %}
+    </div>
 </div>
 </body>
 </html>

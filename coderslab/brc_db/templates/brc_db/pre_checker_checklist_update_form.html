@@ -8,37 +8,80 @@
 </head>
 <body>
 {% include 'header.html' %}
-<div class="container">
+{% load bootstrap %}
+<div class="container mx">
+    <div class="col-md-8 mx-auto">
+
     {% if msg1 %}
     <h1 style="color: coral">{{msg1}}</h1>
     <p><a href='/pre_review_list/'>Pre acceptance list</a></p>
     {% else %}
 
     <h1 style="color: #ba2121">{{msg}}</h1>
-
-    <p>CIM Number: {{p.cim_number}}</p>
-    <p>IOS current? : {{p.get_ios_current_display}}</p>
-    <p>IOS inline: {{p.get_ios_inline_display}}</p>
-    <p>K&E moderate for manged portfolio: {{p.get_ke_mp_mod_display}} </p>
-    <p>K&E limited for asset invested: {{p.get_ke_limited_display}} </p>
-    <p>Fees checked: {{p.get_fees_check_display}} </p>
-    <p>Charles River updated: {{p.get_cr_check_display}}</p>
-    <p>Substantial affiliation updated: {{p.get_sa_check_display}}</p>
-    <p>Comment: {{p.comment}}</p>
-    <p>Maker: {{p.pre_maker}} Maker date: {{p.pre_maker_date}}</p>
+        <table class="table">
+  <thead class="thead-warning">
+    <tr class="table-danger">
+      <th scope="col">CIM</th>
+      <th scope="col">{{p.cim_number}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">IOS current?</th>
+      <td>{{p.get_ios_current_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">IOS inline</th>
+      <td>{{p.get_ios_inline_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">K&E moderate for manged portfolio</th>
+      <td>{{p.get_ke_mp_mod_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">K&E limited for asset invested</th>
+      <td>{{p.get_ke_limited_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Fees checked</th>
+      <td>{{p.get_fees_check_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Charles River updated</th>
+      <td>{{p.get_cr_check_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Substantial affiliation updated</th>
+      <td>{{p.get_sa_check_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Comment</th>
+      <td>{{p.comment}}</td>
+    </tr>
+      <tr>
+      <th scope="row">Maker</th>
+      <td>{{p.pre_maker}}</td>
+    </tr>
+        <tr>
+      <th scope="row">Maker review date</th>
+      <td>{{p.pre_maker_date}}</td>
+    </tr>
+  </tbody>
+</table>
     <form method="post">
         {% csrf_token %}
-        {{form.as_p}}<br>
-        <input type="submit" VALUE="OK">
+        {{form|bootstrap}}<br>
+        <input class="btn btn-primary" type="submit" VALUE="Validate Review">
     </form>
 
         <form method="post">
         {% csrf_token %}
-        {{form1.as_p}}<br>
-        <input type="submit" VALUE="OK">
+        {{form1|bootstrap}}
+        <input class="btn btn-warning" type="submit" VALUE="Send comment to maker">
         </form>
 
     {% endif %}
+    </div>
 </div>
 </body>
 </html>

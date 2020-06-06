@@ -68,20 +68,22 @@ class SpecialRestriction(models.Model):
 
 
 class CIMAccount(models.Model):
-    cim_number = models.CharField(max_length=4, unique=True)
-    lv_name = models.ForeignKey(LV, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    pm = models.ForeignKey(PM, on_delete=models.CASCADE)
-    eg_number = models.CharField(max_length=16)
-    open_date = models.DateField()
-    close_date = models.DateField(null=True, blank=True)
-    close_reason = models.CharField(max_length=128, null=True, blank=True)
-    closed = models.BooleanField(default=False)
-    client_restrictions = models.TextField(null=True, blank=True)
-    special_templates = models.ManyToManyField(SpecialRestriction, default=None, blank=True)
-    funded = models.BooleanField(null=True, blank=True)
-    funded_date = models.DateField(blank=True, null=True)
-    funded_amount = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=12)
+    cim_number = models.CharField(max_length=4, unique=True, verbose_name='CIM')
+    lv_name = models.ForeignKey(LV, on_delete=models.CASCADE, verbose_name='LV')
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, verbose_name='Region')
+    pm = models.ForeignKey(PM, on_delete=models.CASCADE, verbose_name='PM')
+    eg_number = models.CharField(max_length=16, verbose_name='EG')
+    open_date = models.DateField(verbose_name='Open Date')
+    close_date = models.DateField(null=True, blank=True, verbose_name='Close date')
+    close_reason = models.CharField(max_length=128, null=True, blank=True, verbose_name='Reason of closing')
+    closed = models.BooleanField(default=False, verbose_name='Closed')
+    client_restrictions = models.TextField(null=True, blank=True, verbose_name='Client restrictions')
+    special_templates = models.ManyToManyField(SpecialRestriction, default=None, blank=True,
+                                               verbose_name='Special rules')
+    funded = models.BooleanField(null=True, blank=True, verbose_name='Funded')
+    funded_date = models.DateField(blank=True, null=True, verbose_name='Funded date')
+    funded_amount = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=12,
+                                        verbose_name='Funded amount')
 
 
     @property

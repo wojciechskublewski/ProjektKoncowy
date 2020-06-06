@@ -284,7 +284,16 @@ class MakerPreChecklistView(View):
             }
             return render(request,
                           'brc_db/pre_maker_checklist_update_form.html', ctx)
-        form = PREMakerChecklistForm
+        form = PREMakerChecklistForm(initial={
+            'ios_current': pre.ios_current,
+            'ios_inline': pre.ios_inline,
+            'ke_mp_mod': pre.ke_mp_mod,
+            'ke_limited': pre.ke_limited,
+            'fees_check': pre.fees_check,
+            'cr_check': pre.cr_check,
+            'sa_check': pre.sa_check,
+            'comment': pre.comment
+        })
         ctx = {
             'form': form,
             'pre': pre
@@ -304,6 +313,7 @@ class MakerPreChecklistView(View):
             pre.cr_check = p.cr_check
             pre.sa_check = p.sa_check
             pre.fees_check = p.fees_check
+            pre.comment = p.comment
             pre.pre_maker_date = datetime.datetime.now().date()
             pre.pre_maker = request.user
             pre.save()
@@ -380,10 +390,18 @@ class MakerPostChecklistView(View):
             }
             return render(request, 'brc_db/post_maker_checklist_update_form.html', ctx)
         c = CIMAccount.objects.get(cim_number=p.cim_number)
-        form = PostMakerChecklistForm
+        form = PostMakerChecklistForm(initial={
+            'fees_checked': p.fees_checked,
+            'letter_sent': p.letter_sent,
+            'cr_client_restriction': p.cr_client_restriction,
+            'cr_aa_bg_system': p.cr_aa_bg_system,
+            'cr_sa': p.cr_sa,
+            'comment': p.comment
+        })
         if not c.funded or c.funded_date is None or c.funded_amount is None:
             pk = c.id
             return redirect(f'/update_funded_CIM/{pk}/')
+
         return render(request, 'brc_db/post_maker_checklist_update_form.html',
                       {'form': form, 'cim': c})
 

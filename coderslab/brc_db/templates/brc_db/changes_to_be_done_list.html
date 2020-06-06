@@ -9,14 +9,28 @@
 <body>
 {% include 'header.html' %}
 <div class="container">
-{% for c in change %}
 
-    <p>{{c.cim_number}}, {{c.change.change_date}} {{c.change.get_change_name_display}}
-        <a href="/changes_maker_review/{{c.id}}/">Maker Review</a>
-        <a href="/changes_checker_review/{{c.id}}/">Checker Review</a>
-    </p>
+    <table class="table table-bordered">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">CIM</th>
+          <th scope="col">Change Type</th>
+          <th scope="col">Change Date</th>
+          <th scope="col">Maker Review</th>
+          <th scope="col">Checker Review</th>
+        </tr>
+      </thead>
+        {% for c in change %}
+        <tr>
+            <td>{{c.cim_number}}</td>
+            <td>{{c.change.get_change_name_display}}</td>
+            <td>{{c.change.change_date}}</td>
+            <td><a class="btn btn-primary" href="/changes_maker_review/{{c.id}}/">Maker Review</a></td>
+            <td><a class="btn btn-secondary" href="/changes_checker_review/{{c.id}}/">Checker Review</a></td>
+        </tr>
+        {% endfor %}
+    </table>
 
-{% endfor %}
 </div>
 </body>
 </html>

@@ -8,10 +8,16 @@
 </head>
 <body>
 {% include 'header.html' %}
+
 {% load bootstrap %}
 <div class="container">
+
     <div class="row">
     <div class="col-6 col-md-4 mx-auto">
+        <a class="btn btn-warning" href="/add_PM/">New PM</a>
+        <a class="btn btn-warning" href="/add_lv/">New LV</a>
+        <a class="btn btn-warning" href="/add_region/">New Region</a>
+
     <form method="post">
         {% csrf_token %}
         {{form|bootstrap}}<br>
@@ -19,6 +25,8 @@
     </form>
     </div>
     </div>
+
+
 </div>
 </body>
 </html>

@@ -8,14 +8,32 @@
 <body>
 {% include 'header.html' %}
 <div class="container">
-    {% for account in cim %}
 
-       <p> {{account.cim_number}}, Data review maker: {{account.pre_maker_date}}
-       <a href="/pre_maker_checklist/{{account.id}}/">Maker review</a>
-       <a href="/pre_checker_checklist/{{account.id}}/">Checker review</a>
-       </p>
+    <table class="table table-bordered">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">CIM</th>
+          <th scope="col">CIM Open Date</th>
+          <th scope="col">Maker review date</th>
+          <th scope="col">Maker Review</th>
+          <th scope="col">Checker Review</th>
+        </tr>
+      </thead>
+        {% for account in cim %}
+        <tr>
+            <td>{{account.cim_number}}</td>
+            <td>{{account.cim_number.open_date}}</td>
+            <td>{{account.pre_maker_date}}</td>
+            <td><a class="btn btn-primary" href="/pre_maker_checklist/{{account.id}}/">Maker review</a></td>
+            <td><a class="btn btn-secondary" href="/pre_checker_checklist/{{account.id}}/">Checker review</a></td>
+        </tr>
+
 
     {% endfor %}
+
+    </table>
+
+
 </div>
 </body>
 </html>

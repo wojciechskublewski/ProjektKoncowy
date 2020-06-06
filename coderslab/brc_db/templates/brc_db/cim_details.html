@@ -16,12 +16,18 @@
 
 {% else %}
 
-<h1>{{cim.cim_number}}</h1>
-<p>Funded amount {{cim.funded_amount}}</p>
-<p>Pre maker {{cim.cim_number.pre_checker_date}}</p>
+    <ul class="list-group">
+  <li class="list-group-item active">{{cim.cim_number}}</li>
+  <li class="list-group-item">PM: {{cim.pm}}</li>
+  <li class="list-group-item">Open Date: {{cim.open_date}}</li>
+  <li class="list-group-item">Funded: {{cim.funded}}</li>
+  <li class="list-group-item">Closed: {{cim.closed}}</li>
+    </ul>
+<h1></h1>
 
 <a href="/update_CIM/{{cim.id}}/" class="btn btn-warning">CIM Update</a>
 <a href="/update_closing_CIM/{{cim.id}}/" class="btn btn-warning">Update closing details</a>
+<a href="/add_change/" class="btn btn-warning">Add change</a>
 {% endif %}
 </div>
 </body>

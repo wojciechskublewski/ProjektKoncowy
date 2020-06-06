@@ -472,7 +472,13 @@ class CIMDetailsView(View):
     def get(self, request, cim):
         try:
             cim = CIMAccount.objects.get(cim_number=cim)
-            ctx = {'cim': cim}
+            pre = PREReview.objects.get(cim_number=cim.id)
+            post = POSTReview.objects.get(cim_number = cim.id)
+            ctx = {
+                'cim': cim,
+                'pre': pre,
+                'post': post
+            }
         except:
             return redirect('/')
         return render(request, 'brc_db/cim_details.html', ctx)

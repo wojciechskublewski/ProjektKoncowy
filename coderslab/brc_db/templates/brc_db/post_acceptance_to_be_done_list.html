@@ -9,18 +9,29 @@
 {% include 'header.html' %}
 
 <div class="container">
-{% for c in post %}
+    <table class="table table-bordered">
+      <thead>
+        <tr class="table-info">
+          <th scope="col">CIM</th>
+          <th scope="col">Date Open</th>
+          <th scope="col">Maker date</th>
+          <th scope="col">Days since acc open / funded</th>
+          <th scope="col">Maker Review</th>
+          <th scope="col">Checker Review</th>
+        </tr>
+      </thead>
+        {% for c in post %}
+        <tr>
+            <td>{{c.cim_number}}</td>
+            <td>{{c.cim_number.open_date}}</td>
+            <td>{{c.post_maker_date}}</td>
+            <td class="table-danger mx-auto">{{ c.number_post_days}}</td>
+            <td><a class="btn btn-primary" href='/post_maker_checklist/{{c.id}}/'>Maker review</a></td>
+            <td><a class='btn btn-secondary'href='/post_checker_checklist/{{c.id}}/'>Checker review</a></td>
+        </tr>
+        {% endfor %}
+     </table>
 
-    <p>{{c.cim_number }}, Date Open: {{c.cim_number.open_date}} Maker Date: {{c.post_maker_date}}
-
-
-        Days since acc open / funded {{ c.number_post_days}}
-
-        <a href='/post_maker_checklist/{{c.id}}/'>Maker review</a>,
-        <a href='/post_checker_checklist/{{c.id}}/'>Checker review</a>
-    </p>
-
-{% endfor %}
 
 </div>
 </body>
